@@ -1,0 +1,56 @@
+export const APP_NAME = "Connectly";
+export const APP_DESCRIPTION = "Connect with people around the world";
+
+// API Routes
+export const API_ROUTES = {
+    AUTH: {
+        LOGIN: "/api/auth/login",
+        REGISTER: "/api/auth/register",
+        LOGOUT: "/api/auth/logout",
+        ME: "/api/auth/me",
+    },
+    POSTS: {
+        LIST: "/api/posts",
+        CREATE: "/api/posts",
+        GET: (id: string) => `/api/posts/${id}`,
+        UPDATE: (id: string) => `/api/posts/${id}`,
+        DELETE: (id: string) => `/api/posts/${id}`,
+        LIKE: (id: string) => `/api/posts/${id}/like`,
+    },
+    USERS: {
+        GET: (id: string) => `/api/users/${id}`,
+        UPDATE: (id: string) => `/api/users/${id}`,
+    },
+    MESSAGES: {
+        LIST: "/api/messages",
+        SEND: "/api/messages",
+        CONVERSATION: (userId: string) => `/api/messages/${userId}`,
+    },
+} as const;
+
+// App Routes
+export const APP_ROUTES = {
+    HOME: "/",
+    LOGIN: "/login",
+    REGISTER: "/register",
+    DASHBOARD: "/feed",
+    PROFILE: "/profile",
+    MESSAGES: "/messages",
+} as const;
+
+// Pagination
+export const DEFAULT_PAGE_SIZE = 20;
+export const MAX_PAGE_SIZE = 100;
+
+// File Upload
+export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+export const ALLOWED_VIDEO_TYPES = ["video/mp4", "video/webm"];
+
+// Validation
+export const USERNAME_MIN_LENGTH = 3;
+export const USERNAME_MAX_LENGTH = 30;
+export const PASSWORD_MIN_LENGTH = 8;
+export const POST_MAX_LENGTH = 5000;
+export const COMMENT_MAX_LENGTH = 1000;
+export const MESSAGE_MAX_LENGTH = 2000;
