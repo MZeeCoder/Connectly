@@ -22,12 +22,12 @@ export default function HomePage() {
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                            <Link href={APP_ROUTES.REGISTER}>
+                            <Link href={APP_ROUTES.SIGN_UP}>
                                 <Button size="lg" className="w-full sm:w-auto">
                                     Get Started
                                 </Button>
                             </Link>
-                            <Link href={APP_ROUTES.LOGIN}>
+                            <Link href={APP_ROUTES.SIGN_IN}>
                                 <Button size="lg" variant="outline" className="w-full sm:w-auto">
                                     Sign In
                                 </Button>

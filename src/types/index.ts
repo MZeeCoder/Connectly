@@ -73,12 +73,12 @@ export interface AuthUser {
     avatar_url?: string;
 }
 
-export interface LoginCredentials {
+export interface SiginCredentials {
     email: string;
     password: string;
 }
 
-export interface RegisterCredentials {
+export interface SignupCredentials {
     email: string;
     password: string;
     username: string;

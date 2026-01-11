@@ -1,11 +1,13 @@
+import { Sign } from "crypto";
+
 export const APP_NAME = "Connectly";
 export const APP_DESCRIPTION = "Connect with people around the world";
 
 // API Routes
 export const API_ROUTES = {
     AUTH: {
-        LOGIN: "/api/auth/login",
-        REGISTER: "/api/auth/register",
+        SIGN_IN: "/api/auth/signin",
+        SIGN_UP: "/api/auth/signup",
         LOGOUT: "/api/auth/logout",
         ME: "/api/auth/me",
     },
@@ -31,11 +33,14 @@ export const API_ROUTES = {
 // App Routes
 export const APP_ROUTES = {
     HOME: "/",
-    LOGIN: "/login",
-    REGISTER: "/register",
+    SIGN_IN: "/sign-in",
+    SIGN_UP: "/sign-up",
     DASHBOARD: "/feed",
     PROFILE: "/profile",
     MESSAGES: "/messages",
+    PASSWORD_RESET: "/passowrd-reset",
+    FORGOT_PASSWORD: "/forgot-passowrd",
+    VERIFY_ACCOUNT: "/verify-account",
 } as const;
 
 // Pagination

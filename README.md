@@ -8,16 +8,68 @@ A professional, production-ready social media application built with Next.js, Ty
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with custom theme
 - **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
+- **Authentication**: Supabase Auth with OTP Email Verification
 - **Storage**: Supabase Storage
 - **Package Manager**: pnpm
+
+## ✨ Features
+
+- 🔐 **Secure Authentication** with email OTP verification
+- 📧 **Beautiful Email Templates** for OTP codes
+- 🎨 **Modern UI** with Tailwind CSS
+- 📱 **Responsive Design** for all devices
+- 🔒 **Protected Routes** with middleware
+- 🚀 **Fast Performance** with Next.js 15
+- ✅ **Type-Safe** with TypeScript
+- 🎯 **Auto-Login** after email verification
+
+## 🔐 OTP Email Verification Flow
+
+```
+┌─────────────┐
+│   Sign Up   │
+│  (Form)     │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────────┐
+│  Create Account │
+│   (Supabase)    │
+└──────┬──────────┘
+       │
+       ▼
+┌─────────────────┐
+│  Send 6-Digit   │
+│  OTP via Email  │
+└──────┬──────────┘
+       │
+       ▼
+┌─────────────────┐
+│ Verify Account  │
+│ Page (Enter OTP)│
+└──────┬──────────┘
+       │
+       ▼
+┌─────────────────┐
+│  Verify OTP &   │
+│   Auto-Login    │
+└──────┬──────────┘
+       │
+       ▼
+┌─────────────────┐
+│   Dashboard     │
+│   (Feed Page)   │
+└─────────────────┘
+```
+
+**See detailed guide:** [OTP_VERIFICATION_SETUP.md](./OTP_VERIFICATION_SETUP.md)
 
 ## 📁 Project Structure
 
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── (auth)/            # Auth routes (login, register)
+│   ├── (auth)/            # Auth routes (signin, Signup)
 │   ├── (dashboard)/       # Protected dashboard routes
 │   ├── api/               # API route handlers
 │   └── layout.tsx         # Root layout
@@ -25,6 +77,9 @@ src/
 │   ├── ui/               # Reusable UI components
 │   ├── layout/           # Layout components
 │   └── shared/           # Shared components
+├── lib/                  # Utilities and configs
+│   ├── email/           # Email templates for OTP
+│   └── supabase/        # Supabase clients
 ├── server/               # Server-side code
 │   ├── actions/          # Server actions
 │   ├── services/         # Business logic
@@ -163,7 +218,7 @@ src/
 
 ## 🎨 Features
 
-- ✅ **Authentication**: Secure login/register with Supabase Auth
+- ✅ **Authentication**: Secure login/sighup with Supabase Auth
 - ✅ **User Profiles**: Customizable user profiles
 - ✅ **Posts**: Create, read, update, delete posts
 - ✅ **Likes**: Like/unlike posts
