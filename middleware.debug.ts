@@ -55,17 +55,17 @@ export async function middleware(request: NextRequest) {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             cookies: {
-                get: (name) => {
+                get: (name: string) => {
                     const value = request.cookies.get(name)?.value;
                     console.log(`  📖 GET COOKIE: ${name} = ${value ? 'EXISTS' : 'NULL'}`);
                     return value;
                 },
-                set: (name, value, options) => {
+                set: (name: string, value: string, options: any) => {
                     console.log(`  📝 SET COOKIE: ${name} (expires: ${options.maxAge}s)`);
                     request.cookies.set({ name, value, ...options });
                     response.cookies.set({ name, value, ...options });
                 },
-                remove: (name, options) => {
+                remove: (name: string, options: any) => {
                     console.log(`  🗑️  REMOVE COOKIE: ${name}`);
                     request.cookies.set({ name, value: "", ...options });
                     response.cookies.set({ name, value: "", ...options });
