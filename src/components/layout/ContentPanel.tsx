@@ -12,7 +12,7 @@ export function ContentPanel({ section }: ContentPanelProps) {
     return (
         <aside
             className={cn(
-                "fixed left-14 top-16 h-[calc(100vh-4rem)] w-72 bg-[#131314] rounded-tl-xl border-r  border-[#2A2B2C] hidden lg:block overflow-y-auto"
+                "fixed left-14 top-14 h-[calc(100vh-3.5rem)] w-72 bg-[#131314] rounded-tl-xl border-r border-[#3A3B3C] hidden lg:block overflow-y-auto"
             )}
         >
             {section === "feed" && <FeedPanel />}
@@ -84,7 +84,7 @@ function MessagesPanel() {
 
     return (
         <div className="flex flex-col h-full">
-            <div className="p-4 border-b border-[#2A2B2C]">
+            <div className="p-4 border-b border-[#3A3B3C]">
                 <h2 className="text-lg font-semibold text-white mb-3">Messages</h2>
                 <div className="relative">
                     <input
@@ -114,7 +114,7 @@ function MessagesPanel() {
                 {conversations.map((conv) => (
                     <button
                         key={conv.id}
-                        className="w-full flex items-start gap-3 px-4 py-3 hover:bg-[#2A2B2C] transition-colors border-b border-[#2A2B2C]"
+                        className="w-full flex items-start gap-3 px-4 py-3 hover:bg-[#2A2B2C] transition-colors border-b border-[#3A3B3C]"
                     >
                         <div className="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center">
                             <span className="text-white text-sm font-semibold">

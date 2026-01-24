@@ -86,7 +86,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
     return (
         <aside
             className={cn(
-                "fixed left-0 top-16 hidden h-[calc(100vh-4rem)] bg-[#1E1F20] lg:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
+                "fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] bg-[#1E1F20]  lg:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
                 isHovered ? "w-48" : "w-14"
             )}
             onMouseEnter={() => setIsHovered(true)}
@@ -126,7 +126,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
             </nav>
 
             {/* Profile Section at Bottom */}
-            <div className="relative border-t border-[#2A2B2C] p-2" ref={profileMenuRef}>
+            <div className="relative border-t border-[#3A3B3C] p-2" ref={profileMenuRef}>
                 <button
                     onClick={() => {
                         setShowProfileMenu(!showProfileMenu);
