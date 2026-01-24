@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { Logger } from "@/utils/logger";
 
 /**
  * Login API Route
@@ -20,13 +21,20 @@ import { cookies } from "next/headers";
  * This is a POST endpoint: /api/auth/login
  */
 export async function POST(request: NextRequest) {
+    const timer = Logger.timer("LoginAPI", "POST /api/auth/login");
+
     try {
+        Logger.request("LoginAPI", "POST", "/api/auth/login");
+
         // Parse the request body
         const body = await request.json();
         const { email, password } = body;
 
+        Logger.debug("LoginAPI", "Login attempt", { email, hasPassword: !!password });
+
         // Validate input
         if (!email || !password) {
+            Logger.validation("LoginAPI", "email/password", "Missing required fields");
             return NextResponse.json(
                 { error: "Email and password are required" },
                 { status: 400 }
@@ -66,11 +74,14 @@ export async function POST(request: NextRequest) {
         const isValidCredentials = email && password;
 
         if (!isValidCredentials) {
+            Logger.warn("LoginAPI", "Invalid credentials attempt", { email });
             return NextResponse.json(
                 { error: "Invalid credentials" },
                 { status: 401 }
             );
         }
+
+        Logger.auth("LoginAPI", "Credentials validated", { email });
 
         /**
          * Generate authentication token
@@ -97,6 +108,7 @@ export async function POST(request: NextRequest) {
          * ```
          */
         const token = `demo_token_${email}_${Date.now()}`;
+        Logger.debug("LoginAPI", "Token generated", { tokenLength: token.length });
 
         /**
          * Set the authentication cookie
@@ -135,12 +147,17 @@ export async function POST(request: NextRequest) {
             maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
         });
 
+        Logger.auth("LoginAPI", "Authentication cookie set", { email });
+
         /**
          * Return success response
          * 
          * The cookie is now set, and middleware will allow access to protected routes.
          * Client will automatically include this cookie in subsequent requests.
          */
+        Logger.success("LoginAPI", "Login successful", { email });
+        timer.end("Login completed successfully");
+
         return NextResponse.json(
             {
                 success: true,
@@ -161,7 +178,10 @@ export async function POST(request: NextRequest) {
          * - Don't expose internal error details to client
          * - Return generic error message
          */
-        console.error("Login error:", error);
+        Logger.error("LoginAPI", "Login error occurred", {
+            error: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+        });
 
         return NextResponse.json(
             { error: "An error occurred during login" },
@@ -176,17 +196,28 @@ export async function POST(request: NextRequest) {
  * Usage: POST /api/auth/logout
  */
 export async function DELETE() {
+    const timer = Logger.timer("LogoutAPI", "DELETE /api/auth/logout");
+
     try {
+        Logger.request("LogoutAPI", "DELETE", "/api/auth/logout");
+
         // Clear the authentication cookie
         const cookieStore = await cookies();
         cookieStore.delete("token");
+
+        Logger.auth("LogoutAPI", "Authentication cookie cleared");
+        Logger.success("LogoutAPI", "Logout successful");
+        timer.end("Logout completed");
 
         return NextResponse.json(
             { success: true, message: "Logged out successfully" },
             { status: 200 }
         );
     } catch (error) {
-        console.error("Logout error:", error);
+        Logger.error("LogoutAPI", "Logout error occurred", {
+            error: error instanceof Error ? error.message : String(error),
+        });
+
         return NextResponse.json(
             { error: "An error occurred during logout" },
             { status: 500 }

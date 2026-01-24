@@ -142,6 +142,53 @@ export class Logger {
     static db(action: string, operation: string, table: string, data?: any) {
         this.log("debug", action, `🗄️ ${operation} on ${table}`, data);
     }
+
+    /**
+     * Log authentication operations
+     */
+    static auth(action: string, message: string, data?: any) {
+        this.log("info", action, `🔐 ${message}`, data);
+    }
+
+    /**
+     * Log middleware operations
+     */
+    static middleware(action: string, message: string, data?: any) {
+        this.log("info", action, `⚙️ ${message}`, data);
+    }
+
+    /**
+     * Log performance metrics
+     */
+    static performance(action: string, operation: string, durationMs: number) {
+        const duration = durationMs.toFixed(2);
+        this.log("debug", action, `⏱️ ${operation} took ${duration}ms`, undefined);
+    }
+
+    /**
+     * Log validation errors
+     */
+    static validation(action: string, field: string, message: string) {
+        this.log("warn", action, `🚫 Validation failed: ${field} - ${message}`, undefined);
+    }
+
+    /**
+     * Create a timed logger that measures operation duration
+     */
+    static timer(action: string, operation: string) {
+        const startTime = Date.now();
+        this.start(action, operation);
+
+        return {
+            end: (message?: string) => {
+                const duration = Date.now() - startTime;
+                this.performance(action, operation, duration);
+                if (message) {
+                    this.end(action, message);
+                }
+            }
+        };
+    }
 }
 
 // Export a simpler interface for client components

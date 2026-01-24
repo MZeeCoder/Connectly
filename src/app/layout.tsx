@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
     return (
         <html lang="en" className={inter.variable} suppressHydrationWarning>
             <body className="antialiased" suppressHydrationWarning>
-                {children}
+                <ErrorBoundary>
+                    {children}
+                </ErrorBoundary>
             </body>
         </html>
     );

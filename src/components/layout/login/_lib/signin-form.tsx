@@ -8,21 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { SigninAction } from "@/server/actions/auth.actions";
 import { APP_ROUTES } from "@/lib/constants";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-
-// Client-side logger helper
-const clientLog = {
-    info: (action: string, message: string, data?: object) => {
-        console.log(`🔐 [${action}] ${message}`, data || "");
-    },
-    error: (action: string, message: string, data?: object) => {
-        console.error(`❌ [${action}] ${message}`, data || "");
-    },
-    debug: (action: string, message: string, data?: object) => {
-        if (process.env.NODE_ENV === "development") {
-            console.debug(`🔍 [${action}] ${message}`, data || "");
-        }
-    },
-};
+import { clientLogger } from "@/utils/logger";
 
 export default function SinginForm() {
     const router = useRouter();
@@ -37,26 +23,26 @@ export default function SinginForm() {
         setError("");
         setIsLoading(true);
 
-        clientLog.info("SigninForm", "Starting login submission", { email });
+        clientLogger.info("SigninForm", "Starting login submission", { email });
 
         try {
             const result = await SigninAction({ email, password });
 
             if (result.success && result.data) {
-                clientLog.info("SigninForm", "Login successful, redirecting to dashboard", {
+                clientLogger.success("SigninForm", "Login successful, redirecting", {
                     email,
                     redirectTo: result.data.redirectTo
                 });
                 router.push(result.data.redirectTo);
             } else {
-                clientLog.error("SigninForm", "Login failed", {
+                clientLogger.error("SigninForm", "Login failed", {
                     email,
                     error: result.error
                 });
                 setError(result.error || "Failed to sign in. Please try again.");
             }
         } catch (err) {
-            clientLog.error("SigninForm", "Unexpected error during login", {
+            clientLogger.error("SigninForm", "Unexpected error during login", {
                 email,
                 error: err instanceof Error ? err.message : "Unknown error"
             });

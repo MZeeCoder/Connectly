@@ -7,23 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { APP_ROUTES } from "@/lib/constants";
 import { FiUser, FiMail, FiLock, FiUserPlus, FiEye, FiEyeOff } from "react-icons/fi";
-
 import { SignupAction } from "@/server/actions/auth.actions";
-
-// Client-side logger helper
-const clientLog = {
-    info: (action: string, message: string, data?: object) => {
-        console.log(`📝 [${action}] ${message}`, data || "");
-    },
-    error: (action: string, message: string, data?: object) => {
-        console.error(`❌ [${action}] ${message}`, data || "");
-    },
-    debug: (action: string, message: string, data?: object) => {
-        if (process.env.NODE_ENV === "development") {
-            console.debug(`🔍 [${action}] ${message}`, data || "");
-        }
-    },
-};
+import { clientLogger } from "@/utils/logger";
 
 export default function SignupForm() {
     const router = useRouter();
@@ -40,7 +25,7 @@ export default function SignupForm() {
         setError("");
         setIsLoading(true);
 
-        clientLog.info("SignupForm", "Starting signup submission", { email, username });
+        clientLogger.info("SignupForm", "Starting signup submission", { email, username });
 
         const result = await SignupAction({
             email,
@@ -49,11 +34,12 @@ export default function SignupForm() {
         });
 
         if (result.success && result.data) {
-            clientLog.info("SignupForm", "Signup successful", { email });
+            clientLogger.success("SignupForm", "Signup successful", { email, username });
             setIsSuccess(true);
         } else {
-            clientLog.error("SignupForm", "Signup failed", {
+            clientLogger.error("SignupForm", "Signup failed", {
                 email,
+                username,
                 error: result.error
             });
             setError(result.error || "Failed to create account");
