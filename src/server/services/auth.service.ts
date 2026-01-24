@@ -12,7 +12,7 @@ export class AuthService {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("users")
+            .from("accounts")
             .select("*")
             .eq("id", userId)
             .single();
@@ -28,7 +28,7 @@ export class AuthService {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("users")
+            .from("account")
             .select("*")
             .eq("username", username)
             .single();
@@ -47,7 +47,7 @@ export class AuthService {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("users")
+            .from("accounts")
             .update(updates)
             .eq("id", userId)
             .select()

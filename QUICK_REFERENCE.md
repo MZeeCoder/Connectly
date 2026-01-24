@@ -21,7 +21,7 @@
    ```
 
 2. **Sign up:**
-   - Go to `http://localhost:3000/sign-up`
+   - Go to `http://localhost:3000/signup`
    - Fill in the form
    - Click "Create Account"
 

@@ -17,7 +17,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
     // Fetch additional user data from database
     const { data: userData } = await supabase
-        .from("users")
+        .from("accounts")
         .select("username, avatar_url")
         .eq("id", user.id)
         .single();

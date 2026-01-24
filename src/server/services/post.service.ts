@@ -17,7 +17,7 @@ export class PostService {
             .from("posts")
             .select(`
         *,
-        user:users(*),
+        user:accounts(*),
         likes(count),
         comments(count)
       `)
@@ -38,7 +38,7 @@ export class PostService {
             .from("posts")
             .select(`
         *,
-        user:users(*),
+        user:accounts(*),
         likes(count),
         comments(count)
       `)
@@ -59,7 +59,7 @@ export class PostService {
             .from("posts")
             .select(`
         *,
-        user:users(*),
+        user:accounts(*),
         likes(count),
         comments(count)
       `)

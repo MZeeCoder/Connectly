@@ -82,5 +82,4 @@ export interface SignupCredentials {
     email: string;
     password: string;
     username: string;
-    full_name?: string;
 }

@@ -1,10 +1,7 @@
-import ForgotPasswordPage from "@/components/layout/forgotpassword/page";
+"use client";
 
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 
-export default function ForgotPassword() {
-    return (
-        <>
-            <ForgotPasswordPage />
-        </>
-    )
+export default function ForgotPasswordPage() {
+    return <ForgotPasswordForm />;
 }

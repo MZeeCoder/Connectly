@@ -31,8 +31,8 @@ A complete, production-ready folder structure has been set up in the `src/` dire
 
 #### Routes
 - ✅ Home page (/)
-- ✅ SIGN_IN page (/sign-in)
-- ✅ SIGN-UP page (/sign-up)
+- ✅ SIGN_IN page (/login)
+- ✅ signup page (/signup)
 - ✅ Feed page (/feed) - Protected route
 - ✅ Profile page (/profile) - Protected route
 - ✅ Messages page (/messages) - Protected route

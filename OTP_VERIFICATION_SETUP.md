@@ -132,7 +132,7 @@ await sgMail.send({
 
 1. **Signup:**
    ```
-   Navigate to /sign-up
+   Navigate to /signup
    Fill in the form
    Submit
    ```

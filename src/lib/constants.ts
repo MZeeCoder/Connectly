@@ -33,13 +33,13 @@ export const API_ROUTES = {
 // App Routes
 export const APP_ROUTES = {
     HOME: "/",
-    SIGN_IN: "/sign-in",
-    SIGN_UP: "/sign-up",
+    SIGN_IN: "/login",
+    SIGN_UP: "/signup",
     DASHBOARD: "/feed",
     PROFILE: "/profile",
     MESSAGES: "/messages",
-    PASSWORD_RESET: "/passowrd-reset",
-    FORGOT_PASSWORD: "/forgot-passowrd",
+    PASSWORD_RESET: "/reset-password",
+    FORGOT_PASSWORD: "/forgot-password",
     VERIFY_ACCOUNT: "/verify-account",
 } as const;
 

@@ -38,3 +38,28 @@ body {
     transform: translateY(0);
   }
 }
+
+
+@layer utilities {
+  /* Bar color */
+  #nprogress .bar {
+    @apply bg-[#BB86FC] h-1;
+  }
+
+  /* Bar glow */
+  #nprogress .peg {
+    @apply shadow-[#BB86FC] shadow-lg;
+  }
+
+  /* Spinner circle */
+  #nprogress .spinner-icon {
+    @apply border-t-[#BB86FC] border-l-transparent border-r-transparent border-b-transparent;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Optional: position spinner top-right */
+  #nprogress .spinner {
+    @apply fixed top-2 right-2 z-[9999];
+  }
+}
