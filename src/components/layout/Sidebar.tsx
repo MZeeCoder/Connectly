@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { APP_ROUTES } from "@/lib/constants";
 import { cn } from "@/utils/cn";
 import { useState, useRef, useEffect } from "react";
@@ -59,6 +59,7 @@ const sidebarItems = [
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
     const pathname = usePathname();
+    const router = useRouter();
     const [isHovered, setIsHovered] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -77,10 +78,11 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
         }
     }, [showProfileMenu]);
 
-    const handleSectionClick = (sectionId: "feed" | "messages" | "profile") => {
+    const handleSectionClick = (sectionId: "feed" | "messages" | "profile", href: string) => {
         // Toggle: if clicking the same section, close it; otherwise, open the new section
         onSectionChange(activeSection === sectionId ? null : sectionId);
-
+        // Navigate to the route
+        router.push(href);
     };
 
     return (
@@ -100,7 +102,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                     return (
                         <button
                             key={item.id}
-                            onClick={() => handleSectionClick(item.id)}
+                            onClick={() => handleSectionClick(item.id, item.href)}
                             className={cn(
                                 "flex items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",
                                 isActive
@@ -131,6 +133,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                     onClick={() => {
                         setShowProfileMenu(!showProfileMenu);
                         onSectionChange(showProfileMenu ? null : "profile");
+                        router.push(APP_ROUTES.PROFILE);
                     }}
                     className={cn(
                         "flex w-full items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",

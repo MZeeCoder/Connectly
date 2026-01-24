@@ -1,5 +1,6 @@
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 export default function ProfilePage() {
     return (
@@ -12,7 +13,10 @@ export default function ProfilePage() {
                             User Profile
                         </h1>
                         <p className="mb-4 text-muted-foreground">@username</p>
-                        <Button variant="outline">Edit Profile</Button>
+                        <div className="flex flex-col sm:flex-row gap-3 items-center sm:items-start">
+                            <Button variant="outline">Edit Profile</Button>
+                            <LogoutButton />
+                        </div>
                     </div>
                 </div>
 

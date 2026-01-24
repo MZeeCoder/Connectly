@@ -3,7 +3,7 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --primary: #BB86FC;
+  --primary: #a855f7;
   --gray: #2a2a2a;
   --gray-light: #3a3a3a;
   --gray-dark: #1a1a1a;
@@ -43,23 +43,27 @@ body {
 @layer utilities {
   /* Bar color */
   #nprogress .bar {
-    @apply bg-[#BB86FC] h-1;
+    background: linear-gradient(to right, #a855f7, #9333ea) !important;
+    height: 3px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
   }
 
   /* Bar glow */
   #nprogress .peg {
-    @apply shadow-[#BB86FC] shadow-lg;
+    box-shadow: 0 0 12px #a855f7, 0 0 8px #a855f7 !important;
+    border-radius: 4px !important;
   }
 
   /* Spinner circle */
   #nprogress .spinner-icon {
-    @apply border-t-[#BB86FC] border-l-transparent border-r-transparent border-b-transparent;
-    width: 16px;
-    height: 16px;
+    border-color: #a855f7 transparent transparent transparent !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   /* Optional: position spinner top-right */
   #nprogress .spinner {
-    @apply fixed top-2 right-2 z-[9999];
+    @apply fixed top-3 right-3 z-[9999];
   }
 }
