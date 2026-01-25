@@ -26,17 +26,12 @@ export default function ResetPasswordForm() {
         // Listen for PASSWORD_RECOVERY event
         const { data: authListener } = supabase.auth.onAuthStateChange(
             async (event, session) => {
-                console.log("🔐 [ResetPassword] Auth event:", event);
-
                 if (event === "PASSWORD_RECOVERY") {
-                    console.log("✅ [ResetPassword] Valid recovery session detected");
                     setRecoveryState("valid");
                 } else if (event === "SIGNED_IN" && session) {
                     // After password update, user is signed in
-                    console.log("✅ [ResetPassword] Password updated successfully");
                 } else if (!session && recoveryState === "loading") {
                     // No session and no recovery event - invalid link
-                    console.log("❌ [ResetPassword] No valid recovery session");
                     setRecoveryState("invalid");
                 }
             }
@@ -46,7 +41,6 @@ export default function ResetPasswordForm() {
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                console.log("✅ [ResetPassword] Existing session found");
                 setRecoveryState("valid");
             } else {
                 // Give it a moment for the auth state change to fire
@@ -85,21 +79,17 @@ export default function ResetPasswordForm() {
         }
 
         try {
-            console.log("🔐 [ResetPassword] Attempting to update password");
-
             // Update the user's password
             const { data, error: updateError } = await supabase.auth.updateUser({
                 password: newPassword,
             });
 
             if (updateError) {
-                console.error("❌ [ResetPassword] Update error:", updateError);
                 setError(updateError.message);
                 setIsLoading(false);
                 return;
             }
 
-            console.log("✅ [ResetPassword] Password updated successfully");
             setSuccess(true);
 
             // Redirect to login after 2 seconds
@@ -107,7 +97,6 @@ export default function ResetPasswordForm() {
                 router.push("/login");
             }, 2000);
         } catch (err) {
-            console.error("❌ [ResetPassword] Unexpected error:", err);
             setError("Something went wrong. Please try again.");
             setIsLoading(false);
         }

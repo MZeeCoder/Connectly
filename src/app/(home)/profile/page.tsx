@@ -2,6 +2,8 @@ import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import LogoutButton from "@/components/auth/LogoutButton";
 
+export const dynamic = "force-dynamic";
+
 export default function ProfilePage() {
     return (
         <div className="mx-auto max-w-4xl">

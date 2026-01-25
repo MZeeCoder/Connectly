@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { Logger } from "@/utils/logger";
+import { SITE_URL } from "@/lib/constants";
 
 /**
  * Server Action for user signup
@@ -25,7 +26,8 @@ export async function SignupAction(data: {
         const supabase = await createClient();
 
         // Get the app URL for the confirmation redirect
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        // Auto-detects: localhost:3000 in dev, production URL in prod
+        const siteUrl = SITE_URL;
         Logger.debug("SignupAction", "Site URL configured", { siteUrl });
 
         Logger.auth("SignupAction", "Initiating Supabase signup");

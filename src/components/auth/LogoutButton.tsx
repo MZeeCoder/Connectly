@@ -39,13 +39,11 @@ export default function LogoutButton() {
                 router.push(result.data?.redirectTo || "/login");
                 router.refresh(); // Refresh to clear any cached data
             } else {
-                console.error("Logout error:", result.error);
                 // Even if the action fails, try to redirect
                 // The middleware will catch unauthorized access anyway
                 router.push("/login");
             }
         } catch (error) {
-            console.error("Logout error:", error);
             router.push("/login");
         } finally {
             setIsLoading(false);

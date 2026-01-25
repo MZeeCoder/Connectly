@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 export default function MessagesPage() {
     return (
         <div className="mx-auto max-w-6xl">

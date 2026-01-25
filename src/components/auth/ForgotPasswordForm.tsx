@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { createClient } from "@/lib/supabase/client";
 import { FiMail, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import { SITE_URL } from "@/lib/constants";
 
 export default function ForgotPasswordForm() {
     const [email, setEmail] = useState("");
@@ -20,25 +21,18 @@ export default function ForgotPasswordForm() {
         setIsLoading(true);
 
         try {
-            console.log("🔐 [ForgotPassword] Requesting password reset for:", email);
-
-            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
             const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${siteUrl}/reset-password`,
+                redirectTo: `${SITE_URL}/reset-password`,
             });
 
             if (resetError) {
-                console.error("❌ [ForgotPassword] Reset error:", resetError);
                 setError(resetError.message);
                 setIsLoading(false);
                 return;
             }
 
-            console.log("✅ [ForgotPassword] Password reset email sent");
             setSuccess(true);
         } catch (err) {
-            console.error("❌ [ForgotPassword] Unexpected error:", err);
             setError("Something went wrong. Please try again.");
             setIsLoading(false);
         }

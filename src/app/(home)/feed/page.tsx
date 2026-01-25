@@ -4,6 +4,8 @@ import { PostService } from "@/server/services/post.service";
 import { formatRelativeTime } from "@/utils/date";
 import { Avatar } from "@/components/ui/Avatar";
 
+export const dynamic = "force-dynamic";
+
 async function FeedContent() {
     const posts = await PostService.getFeed();
 
