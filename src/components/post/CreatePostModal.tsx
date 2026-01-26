@@ -273,39 +273,39 @@ export function CreatePostModal({
             isOpen={isOpen}
             onClose={handleClose}
             title={isEditing ? "Edit Post" : "Create Post"}
-            className="max-w-2xl rounded-2xl bg-[#632b98]"
+            className="w-[95%] sm:w-[90%] md:w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-2 sm:mx-4 rounded-xl sm:rounded-2xl bg-[#632b98]"
             showCloseButton={!isSubmitting}
         >
-            <div className="flex flex-col space-y-5">
+            <div className="flex flex-col space-y-3 sm:space-y-4 md:space-y-5">
                 {/* Error Alert with animation */}
                 {error && (
-                    <div className="animate-in slide-in-from-top-2 fade-in duration-300 rounded-xl border border-red-300 bg-gradient-to-r from-red-50 to-red-100 px-4 py-3.5 shadow-sm">
-                        <div className="flex items-start gap-3">
+                    <div className="animate-in slide-in-from-top-2 fade-in duration-300 rounded-lg sm:rounded-xl border border-red-300 bg-gradient-to-r from-red-50 to-red-100 px-3 py-2.5 sm:px-4 sm:py-3.5 shadow-sm">
+                        <div className="flex items-start gap-2 sm:gap-3">
                             <div className="flex-shrink-0 mt-0.5">
-                                <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                                 </svg>
                             </div>
-                            <p className="text-sm font-medium text-red-800">{error}</p>
+                            <p className="text-xs sm:text-sm font-medium text-red-800">{error}</p>
                         </div>
                     </div>
                 )}
 
                 {/* Enhanced Textarea Section */}
-                <div className="group relative rounded-xl border-2 border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-white p-5 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-300/70 focus-within:ring-2 focus-within:ring-purple-400/30 focus-within:border-purple-400">
+                <div className="group relative rounded-lg sm:rounded-xl border-2 border-purple-200/50 bg-gradient-to-br from-purple-50/50 to-white p-3 sm:p-4 md:p-5 shadow-md transition-all duration-300 hover:shadow-lg hover:border-purple-300/70 focus-within:ring-2 focus-within:ring-purple-400/30 focus-within:border-purple-400">
                     <div className="absolute -top-px left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
 
                     <Textarea
                         placeholder="What's on your mind? ✨"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="min-h-[160px] resize-none border-none bg-transparent p-0 text-base text-black placeholder:text-gray-600 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] lg:min-h-[160px] resize-none border-none bg-transparent p-0 text-sm sm:text-base text-black placeholder:text-gray-600 focus-visible:ring-0 focus-visible:ring-offset-0"
                         disabled={isSubmitting}
                     />
 
                     {/* Character Counter with progress bar */}
-                    <div className="mt-3 space-y-2">
-                        <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
+                        <div className="h-0.5 sm:h-1 w-full bg-gray-200 rounded-full overflow-hidden">
                             <div
                                 className={cn(
                                     "h-full transition-all duration-300 ease-out",
@@ -321,7 +321,7 @@ export function CreatePostModal({
                         <div className="flex justify-end">
                             <span
                                 className={cn(
-                                    "text-xs font-medium transition-colors duration-200",
+                                    "text-[10px] sm:text-xs font-medium transition-colors duration-200",
                                     isOverLimit
                                         ? "text-red-600 font-semibold"
                                         : characterCount > POST_MAX_LENGTH * 0.9
@@ -338,15 +338,15 @@ export function CreatePostModal({
                 {/* Enhanced Media Grid */}
                 {media.length > 0 && (
                     <div className="animate-in fade-in slide-in-from-bottom-3 duration-300">
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-2.5">
                             {media.map((item, index) => (
                                 <div
                                     key={item.id}
-                                    className="group relative w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 shadow-md hover:shadow-xl transition-all duration-300 animate-in fade-in zoom-in"
+                                    className="group relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-md sm:rounded-lg md:rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-md hover:shadow-xl transition-all duration-300 animate-in fade-in zoom-in"
                                     style={{ animationDelay: `${index * 50}ms` }}
                                 >
                                     {/* Media Content */}
-                                    <div className="absolute inset-0 overflow-hidden rounded-lg">
+                                    <div className="absolute inset-0 overflow-hidden rounded-md sm:rounded-lg md:rounded-xl">
                                         {item.type === "image" ? (
                                             <img
                                                 src={item.url}
@@ -367,8 +367,8 @@ export function CreatePostModal({
 
                                     {/* Video Badge */}
                                     {item.type === "video" && (
-                                        <div className="absolute bottom-1 left-1 z-10 flex items-center gap-1 rounded-md bg-black/80 backdrop-blur-sm px-1.5 py-0.5 shadow-lg">
-                                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <div className="absolute bottom-1 left-1 z-10 flex items-center gap-0.5 sm:gap-1 rounded-sm sm:rounded-md bg-black/80 backdrop-blur-sm px-1 py-0.5 sm:px-1.5 shadow-lg">
+                                            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                             </svg>
                                         </div>
@@ -378,10 +378,10 @@ export function CreatePostModal({
                                     <button
                                         onClick={() => handleRemoveMedia(item.id)}
                                         disabled={isSubmitting}
-                                        className="absolute -right-1 -top-1 z-30 rounded-full bg-red-500 backdrop-blur-sm p-1 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="absolute -right-1 sm:-right-1.5 -top-1 sm:-top-1.5 z-30 rounded-full bg-red-500 backdrop-blur-sm p-0.5 sm:p-1 md:p-1.5 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
                                         aria-label="Remove media"
                                     >
-                                        <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
                                     </button>
@@ -392,7 +392,7 @@ export function CreatePostModal({
                 )}
 
                 {/* Enhanced Media Upload Button */}
-                <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 p-4 border border-purple-100">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 rounded-lg sm:rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 p-3 sm:p-4 border border-purple-100">
                     <input
                         ref={fileInputRef}
                         id="media-upload"
@@ -403,78 +403,74 @@ export function CreatePostModal({
                         disabled={isSubmitting}
                         className="hidden"
                     />
-                    <label
-                        htmlFor="media-upload"
-                        className={cn(
-                            "flex cursor-pointer items-center gap-3 rounded-lg bg-white border-2 border-purple-200 px-5 py-2.5 text-sm font-medium text-purple-700 transition-all duration-300 hover:bg-purple-50 hover:border-purple-300 hover:shadow-md hover:scale-105 active:scale-95",
-                            isSubmitting && "opacity-50 cursor-not-allowed hover:scale-100"
-                        )}
-                    >
-                        <div className="flex items-center gap-2">
-                            <PhotoIcon />
-                            <VideoIcon />
-                        </div>
-                        <span>Add Photos / Videos</span>
-                    </label>
-
-                    <div className="flex items-center gap-2 text-xs text-gray-600">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Max {MAX_FILE_SIZE / 1024 / 1024}MB per file</span>
-                    </div>
-                </div>
-
-                {/* Enhanced Footer */}
-                <div className="flex items-center justify-between gap-4 pt-4 border-t-2 border-purple-100">
-                    {/* Upload Progress Indicator */}
-                    {isUploading && (
-                        <div className="flex items-center gap-2 text-sm text-purple-600 animate-pulse">
-                            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span className="font-medium">Uploading media...</span>
-                        </div>
+                <label
+                    htmlFor="media-upload"
+                    className={cn(
+                        "flex cursor-pointer items-center gap-2 sm:gap-3 rounded-md sm:rounded-lg bg-white border-2 border-purple-200 px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 text-xs sm:text-sm font-medium text-purple-700 transition-all duration-300 hover:bg-purple-50 hover:border-purple-300 hover:shadow-md hover:scale-105 active:scale-95",
+                        isSubmitting && "opacity-50 cursor-not-allowed hover:scale-100"
                     )}
+                >
+                    <span className="whitespace-nowrap">Add Photos / Videos</span>
+                </label>
 
-                    <div className={cn("flex gap-3", isUploading ? "ml-auto" : "ml-auto")}>
-                        <Button
-                            variant="outline"
-                            onClick={handleClose}
-                            disabled={isSubmitting}
-                            className="px-6  transition-all duration-200 hover:scale-105 active:scale-95"
-                        >
-                            Cancel
-                        </Button>
-
-                        <Button
-                            onClick={handleSubmit}
-                            isLoading={isSubmitting}
-                            disabled={
-                                isSubmitting ||
-                                isOverLimit ||
-                                (!content.trim() && media.length === 0)
-                            }
-                            className="px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
-                        >
-                            {isUploading ? (
-                                <span className="flex items-center gap-2">
-                                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Uploading...
-                                </span>
-                            ) : isEditing ? (
-                                "Save Changes"
-                            ) : (
-                                "Post"
-                            )}
-                        </Button>
-                    </div>
+                <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-600">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="whitespace-nowrap">Max {MAX_FILE_SIZE / 1024 / 1024}MB</span>
                 </div>
             </div>
-        </Modal>
+
+            {/* Enhanced Footer */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t-2 border-purple-100">
+                {/* Upload Progress Indicator */}
+                {isUploading && (
+                    <div className="flex items-center gap-2 text-xs sm:text-sm text-purple-600 animate-pulse">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span className="font-medium">Uploading media...</span>
+                    </div>
+                )}
+
+                <div className={cn("flex gap-2 sm:gap-3 w-full sm:w-auto", isUploading ? "sm:ml-auto" : "sm:ml-auto")}>
+                    <Button
+                        variant="outline"
+                        onClick={handleClose}
+                        disabled={isSubmitting}
+                        className="flex-1 sm:flex-none px-4 sm:px-6 text-xs sm:text-sm transition-all duration-200 hover:scale-105 active:scale-95"
+                    >
+                        Cancel
+                    </Button>
+
+                    <Button
+                        onClick={handleSubmit}
+                        isLoading={isSubmitting}
+                        disabled={
+                            isSubmitting ||
+                            isOverLimit ||
+                            (!content.trim() && media.length === 0)
+                        }
+                        className="flex-1 sm:flex-none px-6 sm:px-8 text-xs sm:text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                    >
+                        {isUploading ? (
+                            <span className="flex items-center gap-2">
+                                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Uploading...
+                            </span>
+                        ) : isEditing ? (
+                            "Save Changes"
+                        ) : (
+                            "Post"
+                        )}
+                    </Button>
+                </div>
+            </div>
+        </div>
+        </Modal >
     );
 }
