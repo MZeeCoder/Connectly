@@ -6,7 +6,7 @@ import { Logger } from "@/utils/logger";
 
 /**
  * GET /api/auth/callback
- * 
+ *
  * This handles the email confirmation callback from Supabase.
  * When the user clicks the confirmation link in their email,
  * Supabase redirects them here with a token_hash and type parameter.
@@ -16,13 +16,17 @@ export async function GET(request: NextRequest) {
 
     const requestUrl = new URL(request.url);
     const token_hash = requestUrl.searchParams.get("token_hash");
+    const token = requestUrl.searchParams.get("token");
     const type = requestUrl.searchParams.get("type");
     const error = requestUrl.searchParams.get("error");
     const errorDescription = requestUrl.searchParams.get("error_description");
+    const code = requestUrl.searchParams.get("code");
 
     Logger.request("AuthCallback", "GET", "/api/auth/callback");
     Logger.debug("AuthCallback", "Callback parameters received", {
         hasTokenHash: !!token_hash,
+        hasToken: !!token,
+        hasCode: !!code,
         type,
         hasError: !!error,
     });
@@ -38,9 +42,12 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
     }
 
-    // Verify we have the required token_hash
-    if (!token_hash) {
-        Logger.error("AuthCallback", "Missing token_hash in callback");
+    // Verify we have at least one authentication parameter
+    if (!token_hash && !token && !code) {
+        Logger.error(
+            "AuthCallback",
+            "Missing authentication parameters in callback",
+        );
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("error", "Invalid confirmation link");
         return NextResponse.redirect(loginUrl);
@@ -50,20 +57,41 @@ export async function GET(request: NextRequest) {
         Logger.debug("AuthCallback", "Creating Supabase client");
         const supabase = await createClient();
 
-        Logger.auth("AuthCallback", "Verifying OTP token", { type });
-        // Verify the email with the token hash
-        const { data, error: verifyError } = await supabase.auth.verifyOtp({
-            token_hash,
-            type: type as "email" | "signup" | "recovery" | "invite" || "email",
-        });
+        let data;
+        let verifyError;
+
+        // Handle PKCE flow (code parameter) - used by email confirmations and magic links
+        if (code) {
+            Logger.auth("AuthCallback", "Exchanging code for session", { type });
+            const result = await supabase.auth.exchangeCodeForSession(code);
+            data = result.data;
+            verifyError = result.error;
+        }
+        // Handle OTP flow (token_hash or token parameter) - legacy email confirmations
+        else if (token_hash || token) {
+            Logger.auth("AuthCallback", "Verifying OTP token", { type });
+            const result = await supabase.auth.verifyOtp({
+                token_hash: token_hash || token || "",
+                type:
+                    (type as "email" | "signup" | "recovery" | "invite" | "magiclink") ||
+                    "email",
+            });
+            data = result.data;
+            verifyError = result.error;
+        } else {
+            Logger.error("AuthCallback", "No valid authentication parameter found");
+            const loginUrl = new URL("/login", request.url);
+            loginUrl.searchParams.set("error", "Invalid confirmation link");
+            return NextResponse.redirect(loginUrl);
+        }
 
         if (verifyError) {
-            Logger.error("AuthCallback", "OTP verification failed", {
+            Logger.error("AuthCallback", "Authentication failed", {
                 error: verifyError.message,
                 code: verifyError.code,
             });
             const loginUrl = new URL("/login", request.url);
-            loginUrl.searchParams.set("error", "Failed to verify email. Please try again.");
+            loginUrl.searchParams.set("error", "Failed to verify. Please try again.");
             return NextResponse.redirect(loginUrl);
         }
 
@@ -74,28 +102,14 @@ export async function GET(request: NextRequest) {
             return NextResponse.redirect(loginUrl);
         }
 
-        Logger.success("AuthCallback", "Email verified successfully", {
+        Logger.success("AuthCallback", "Authentication successful", {
             userId: data.user?.id,
             email: data.user?.email,
         });
 
-        // Store session tokens in cookies
-        Logger.debug("AuthCallback", "Setting authentication cookies");
-        const cookieStore = await cookies();
-        cookieStore.set("token", data.session.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 60 * 60 * 24 * 7, // 7 days
-        });
-        cookieStore.set("refresh_token", data.session.refresh_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "lax",
-            maxAge: 60 * 60 * 24 * 30, // 30 days
-        });
-
-        Logger.auth("AuthCallback", "Session cookies set successfully");
+        // Session is automatically handled by Supabase SSR
+        // Cookies are set via the createClient response headers
+        Logger.auth("AuthCallback", "Session established successfully");
         timer.end("Callback processed successfully");
 
         // Redirect to dashboard

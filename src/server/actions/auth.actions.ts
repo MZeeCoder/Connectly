@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { Logger } from "@/utils/logger";
 import { SITE_URL } from "@/lib/constants";
+import authMessages from "@/lib/auth.json";
 
 /**
  * Server Action for user signup
@@ -30,6 +31,22 @@ export async function SignupAction(data: {
         const siteUrl = SITE_URL;
         Logger.debug("SignupAction", "Site URL configured", { siteUrl });
 
+        // Check if user already exists
+        Logger.debug("SignupAction", "Checking if user exists");
+        const { data: existingUsers } = await supabase
+            .from("accounts")
+            .select("email")
+            .eq("email", data.email)
+            .limit(1);
+
+        if (existingUsers && existingUsers.length > 0) {
+            Logger.warn("SignupAction", "User already exists", { email: data.email });
+            return {
+                success: false,
+                error: authMessages.messages.signup.errors.userExists,
+            };
+        }
+
         Logger.auth("SignupAction", "Initiating Supabase signup");
         // Sign up the user with Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -48,7 +65,17 @@ export async function SignupAction(data: {
                 error: authError.message,
                 code: authError.code,
             });
-            return { success: false, error: authError.message };
+            // Handle specific error cases
+            if (authError.message.includes("already registered")) {
+                return {
+                    success: false,
+                    error: authMessages.messages.signup.errors.userExists,
+                };
+            }
+            return {
+                success: false,
+                error: authMessages.messages.signup.errors.generic,
+            };
         }
 
         if (!authData.user) {
@@ -60,7 +87,10 @@ export async function SignupAction(data: {
             userId: authData.user.id,
             email: authData.user.email,
         });
-        Logger.info("SignupAction", "Account will be created automatically after email verification");
+        Logger.info(
+            "SignupAction",
+            "Account will be created automatically after email verification",
+        );
         timer.end("Signup completed successfully");
 
         return {
@@ -77,7 +107,8 @@ export async function SignupAction(data: {
         });
         return {
             success: false,
-            error: error instanceof Error ? error.message : "An unexpected error occurred",
+            error:
+                error instanceof Error ? error.message : "An unexpected error occurred",
         };
     }
 }
@@ -99,10 +130,11 @@ export async function SigninAction(data: { email: string; password: string }) {
 
         Logger.auth("SigninAction", "Authenticating with Supabase");
         // Sign in with email and password
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-            email: data.email,
-            password: data.password,
-        });
+        const { data: authData, error: authError } =
+            await supabase.auth.signInWithPassword({
+                email: data.email,
+                password: data.password,
+            });
 
         if (authError) {
             Logger.warn("SigninAction", "Authentication failed", {
@@ -110,12 +142,39 @@ export async function SigninAction(data: { email: string; password: string }) {
                 code: authError.code,
                 email: data.email,
             });
-            return { success: false, error: authError.message };
+            return {
+                success: false,
+                error:
+                    authMessages.messages.signin.errors.invalidCredentials.description,
+                errorTitle:
+                    authMessages.messages.signin.errors.invalidCredentials.title,
+            };
         }
 
         if (!authData.user || !authData.session) {
             Logger.error("SigninAction", "Invalid credentials - no user or session");
-            return { success: false, error: "Invalid credentials" };
+            return {
+                success: false,
+                error:
+                    authMessages.messages.signin.errors.invalidCredentials.description,
+                errorTitle:
+                    authMessages.messages.signin.errors.invalidCredentials.title,
+            };
+        }
+
+        // Check if email is verified
+        if (!authData.user.email_confirmed_at) {
+            Logger.warn("SigninAction", "Email not verified", {
+                userId: authData.user.id,
+                email: authData.user.email,
+            });
+            // Sign out the user since they can't proceed
+            await supabase.auth.signOut();
+            return {
+                success: false,
+                error: authMessages.messages.signin.errors.emailNotVerified.description,
+                errorTitle: authMessages.messages.signin.errors.emailNotVerified.title,
+            };
         }
 
         Logger.success("SigninAction", "User signed in successfully", {
@@ -145,7 +204,7 @@ export async function SigninAction(data: { email: string; password: string }) {
         });
         return {
             success: false,
-            error: error instanceof Error ? error.message : "An unexpected error occurred",
+            error: authMessages.messages.signin.errors.generic,
         };
     }
 }
@@ -189,7 +248,67 @@ export async function LogoutAction() {
         });
         return {
             success: false,
-            error: error instanceof Error ? error.message : "An unexpected error occurred",
+            error:
+                error instanceof Error ? error.message : "An unexpected error occurred",
+        };
+    }
+}
+
+/**
+ * Server Action for magic link login
+ */
+export async function MagicLinkLoginAction(data: { email: string }) {
+    const timer = Logger.timer("MagicLinkLoginAction", "Magic link login");
+
+    try {
+        Logger.start("MagicLinkLoginAction", "Starting magic link login process");
+        Logger.debug("MagicLinkLoginAction", "Magic link request", {
+            email: data.email,
+        });
+
+        const supabase = await createClient();
+        const siteUrl = SITE_URL;
+
+        Logger.auth("MagicLinkLoginAction", "Sending magic link via Supabase");
+        const { error } = await supabase.auth.signInWithOtp({
+            email: data.email,
+            options: {
+                emailRedirectTo: `${siteUrl}/api/auth/callback`,
+            },
+        });
+
+        if (error) {
+            Logger.error("MagicLinkLoginAction", "Failed to send magic link", {
+                error: error.message,
+                code: error.code,
+                email: data.email,
+            });
+            return {
+                success: false,
+                error: "Failed to send magic link. Please try again.",
+            };
+        }
+
+        Logger.success("MagicLinkLoginAction", "Magic link sent successfully", {
+            email: data.email,
+        });
+        timer.end("Magic link sent");
+
+        return {
+            success: true,
+            data: {
+                message: "Check your email for the magic link!",
+            },
+        };
+    } catch (error) {
+        Logger.error("MagicLinkLoginAction", "Unexpected error sending magic link", {
+            error: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
+        });
+        return {
+            success: false,
+            error:
+                error instanceof Error ? error.message : "An unexpected error occurred",
         };
     }
 }
