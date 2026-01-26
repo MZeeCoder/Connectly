@@ -1,6 +1,10 @@
 "use client";
 
 import { cn } from "@/utils/cn";
+import { useEffect, useState } from "react";
+import { ProfileService } from "@/server/services/profile.service";
+import type { ProfileUser } from "@/app/api/profile/route";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 interface ContentPanelProps {
     section: "feed" | "messages" | "profile" | null;
@@ -149,16 +153,73 @@ function MessagesPanel() {
 }
 
 function ProfilePanel() {
+    const [profile, setProfile] = useState<ProfileUser | null>(null);
+    const [postsCount, setPostsCount] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchProfile() {
+            const result = await ProfileService.getCurrentUserProfile();
+            if (result.success && result.data) {
+                setProfile(result.data);
+            }
+            setLoading(false);
+        }
+        fetchProfile();
+    }, []);
+
+    useEffect(() => {
+        async function fetchPostsCount() {
+            try {
+                const response = await fetch("/api/profile/posts");
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        setPostsCount(result.data.length);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch posts count:", err);
+            }
+        }
+        fetchPostsCount();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="p-4 flex items-center justify-center h-40">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="p-4">
             <div className="mb-6">
                 <h2 className="text-lg font-semibold text-white mb-4">Profile</h2>
                 <div className="flex flex-col items-center">
-                    <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mb-3">
-                        <span className="text-white text-2xl font-semibold">HM</span>
-                    </div>
-                    <h3 className="text-white font-medium">User Name</h3>
-                    <p className="text-sm text-gray-400">@username</p>
+                    {profile?.avatar_url ? (
+                        <img
+                            src={profile.avatar_url}
+                            alt={profile.full_name || profile.username}
+                            className="w-20 h-20 rounded-full object-cover mb-3"
+                        />
+                    ) : (
+                        <div className="w-20 h-20 rounded-full bg-primary flex items-center justify-center mb-3">
+                            <span className="text-white text-2xl font-semibold">
+                                {profile?.full_name?.[0] || profile?.username?.[0] || "U"}
+                            </span>
+                        </div>
+                    )}
+                    <h3 className="text-white font-medium">
+                        {profile?.full_name || profile?.username || "User"}
+                    </h3>
+                    <p className="text-sm text-gray-400">@{profile?.username || "username"}</p>
+                    {profile?.bio && (
+                        <p className="text-xs text-gray-500 mt-2 text-center line-clamp-2">
+                            {profile.bio}
+                        </p>
+                    )}
                 </div>
             </div>
 
@@ -187,16 +248,19 @@ function ProfilePanel() {
                 <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                         <span className="text-gray-400">Posts</span>
-                        <span className="text-white font-medium">24</span>
+                        <span className="text-white font-medium">{postsCount}</span>
                     </div>
                     <div className="flex justify-between text-xs">
                         <span className="text-gray-400">Followers</span>
-                        <span className="text-white font-medium">1,234</span>
+                        <span className="text-white font-medium">0</span>
                     </div>
                     <div className="flex justify-between text-xs">
                         <span className="text-gray-400">Following</span>
-                        <span className="text-white font-medium">567</span>
+                        <span className="text-white font-medium">0</span>
                     </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-[#3A3B3C]">
+                    <LogoutButton />
                 </div>
             </div>
         </div>

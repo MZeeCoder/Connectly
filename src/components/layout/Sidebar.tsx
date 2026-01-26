@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { APP_ROUTES } from "@/lib/constants";
 import { cn } from "@/utils/cn";
 import { useState, useRef, useEffect } from "react";
+import { ProfileService } from "@/server/services/profile.service";
+import type { ProfileUser } from "@/app/api/profile/route";
 
 interface SidebarProps {
     activeSection: "feed" | "messages" | "peoples" | "profile" | null;
@@ -83,7 +85,19 @@ export function Sidebar({ activeSection }: SidebarProps) {
     const pathname = usePathname();
     const [isHovered, setIsHovered] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [profile, setProfile] = useState<ProfileUser | null>(null);
     const profileMenuRef = useRef<HTMLDivElement>(null);
+
+    // Fetch profile data
+    useEffect(() => {
+        async function fetchProfile() {
+            const result = await ProfileService.getCurrentUserProfile();
+            if (result.success && result.data) {
+                setProfile(result.data);
+            }
+        }
+        fetchProfile();
+    }, []);
 
     // Close profile menu when clicking outside
     useEffect(() => {
@@ -154,9 +168,17 @@ export function Sidebar({ activeSection }: SidebarProps) {
                     )}
                     title={!isHovered ? "Profile" : undefined}
                 >
-                    <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white font-semibold text-xs">
-                        HM
-                    </div>
+                    {profile?.avatar_url ? (
+                        <img
+                            src={profile.avatar_url}
+                            alt={profile.full_name || profile.username}
+                            className="flex-shrink-0 h-7 w-7 rounded-full object-cover"
+                        />
+                    ) : (
+                        <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white font-semibold text-xs">
+                            {profile?.full_name?.[0] || profile?.username?.[0] || "U"}
+                        </div>
+                    )}
                     <div
                         className={cn(
                             "flex flex-1 items-center justify-between transition-all duration-150 ease-out",
@@ -164,8 +186,12 @@ export function Sidebar({ activeSection }: SidebarProps) {
                         )}
                     >
                         <div className="text-left">
-                            <div className="text-xs font-medium text-white">User Name</div>
-                            <div className="text-[10px] text-gray-400">@username</div>
+                            <div className="text-xs font-medium text-white">
+                                {profile?.full_name || profile?.username || "User"}
+                            </div>
+                            <div className="text-[10px] text-gray-400">
+                                @{profile?.username || "username"}
+                            </div>
                         </div>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
