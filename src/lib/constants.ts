@@ -63,9 +63,9 @@ export const MESSAGE_MAX_LENGTH = 2000;
 // Environment Configuration
 // Automatically uses localhost:3000 in development, production URL in production
 export const SITE_URL =
-    process.env.NODE_ENV === "development"
-        ? "http://localhost:3000"
-        : (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000");
+    process.env.NODE_ENV === "production" && process.env.NEXT_PUBLIC_SITE_URL
+        ? process.env.NEXT_PUBLIC_SITE_URL
+        : "http://localhost:3000";
 
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
