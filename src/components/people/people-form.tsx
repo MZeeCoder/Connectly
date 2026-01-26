@@ -14,7 +14,6 @@ export default function PeopleForm() {
         async function fetchPeoples() {
             try {
                 setLoading(true);
-                debugger;
                 const result = await PeopleService.getAllPeoples();
 
                 if (result.success && result.data) {

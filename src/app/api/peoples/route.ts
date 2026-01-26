@@ -23,10 +23,26 @@ export async function GET() {
 
         const supabase = await createClient();
 
+        // Get the current authenticated user
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            Logger.warn("PeoplesAPI", "User not authenticated");
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "User not authenticated",
+                },
+                { status: 401 }
+            );
+        }
+
         Logger.db("PeoplesAPI", "SELECT", "accounts");
+        // Fetch all users except the current user
         const { data, error } = await supabase
             .from("accounts")
             .select("id, username, full_name, email, avatar_url, bio")
+            .neq("id", user.id)
             .order("created_at", { ascending: false });
 
         if (error) {
