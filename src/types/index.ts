@@ -17,11 +17,32 @@ export interface Post {
     content: string;
     image_url?: string;
     video_url?: string;
+    image_urls?: string[];
+    video_urls?: string[];
     likes_count: number;
     comments_count: number;
     created_at: string;
     updated_at: string;
     user?: User;
+}
+
+// Media Upload Types
+export interface MediaUploadResult {
+    url: string;
+    path: string;
+    type: 'image' | 'video';
+}
+
+export interface CreatePostData {
+    content: string;
+    image_urls?: string[];
+    video_urls?: string[];
+}
+
+export interface UpdatePostData {
+    content?: string;
+    image_urls?: string[];
+    video_urls?: string[];
 }
 
 // Comment Types
