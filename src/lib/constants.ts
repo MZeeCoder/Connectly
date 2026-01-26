@@ -28,6 +28,9 @@ export const API_ROUTES = {
         SEND: "/api/messages",
         CONVERSATION: (userId: string) => `/api/messages/${userId}`,
     },
+    PEOPLES: {
+        LIST: "/api/peoples",
+    },
 } as const;
 
 // App Routes
@@ -38,6 +41,7 @@ export const APP_ROUTES = {
     DASHBOARD: "/feed",
     PROFILE: "/profile",
     MESSAGES: "/messages",
+    PEOPLES: "/peoples",
     PASSWORD_RESET: "/reset-password",
     FORGOT_PASSWORD: "/forgot-password",
     VERIFY_ACCOUNT: "/verify-account",
