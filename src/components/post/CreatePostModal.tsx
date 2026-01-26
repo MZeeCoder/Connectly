@@ -338,36 +338,39 @@ export function CreatePostModal({
                 {/* Enhanced Media Grid */}
                 {media.length > 0 && (
                     <div className="animate-in fade-in slide-in-from-bottom-3 duration-300">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="flex flex-wrap gap-2">
                             {media.map((item, index) => (
                                 <div
                                     key={item.id}
-                                    className="group relative aspect-square overflow-hidden rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-md hover:shadow-xl transition-all duration-300 animate-in fade-in zoom-in"
+                                    className="group relative w-10 h-10 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 shadow-md hover:shadow-xl transition-all duration-300 animate-in fade-in zoom-in"
                                     style={{ animationDelay: `${index * 50}ms` }}
                                 >
                                     {/* Media Content */}
-                                    {item.type === "image" ? (
-                                        <img
-                                            src={item.url}
-                                            alt="Preview"
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                    ) : (
-                                        <video
-                                            src={item.url}
-                                            muted
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                        />
-                                    )}
+                                    <div className="absolute inset-0 overflow-hidden rounded-lg">
+                                        {item.type === "image" ? (
+                                            <img
+                                                src={item.url}
+                                                alt="Preview"
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <video
+                                                src={item.url}
+                                                muted
+                                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                            />
+                                        )}
+                                    </div>
 
                                     {/* Overlay gradient */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                                     {/* Video Badge */}
                                     {item.type === "video" && (
-                                        <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-lg bg-black/80 backdrop-blur-sm px-2.5 py-1 shadow-lg">
-                                            <VideoIcon />
-                                            <span className="text-xs font-medium text-white">Video</span>
+                                        <div className="absolute bottom-1 left-1 z-10 flex items-center gap-1 rounded-md bg-black/80 backdrop-blur-sm px-1.5 py-0.5 shadow-lg">
+                                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                            </svg>
                                         </div>
                                     )}
 
@@ -375,10 +378,12 @@ export function CreatePostModal({
                                     <button
                                         onClick={() => handleRemoveMedia(item.id)}
                                         disabled={isSubmitting}
-                                        className="absolute right-2 top-2 rounded-full bg-red-500/90 backdrop-blur-sm p-2 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="absolute -right-1 -top-1 z-30 rounded-full bg-red-500 backdrop-blur-sm p-1 text-white shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-600 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
                                         aria-label="Remove media"
                                     >
-                                        <CloseIcon />
+                                        <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
                                     </button>
                                 </div>
                             ))}
@@ -438,7 +443,7 @@ export function CreatePostModal({
                             variant="outline"
                             onClick={handleClose}
                             disabled={isSubmitting}
-                            className="px-6 hover:bg-gray-100 transition-all duration-200 hover:scale-105 active:scale-95"
+                            className="px-6  transition-all duration-200 hover:scale-105 active:scale-95"
                         >
                             Cancel
                         </Button>

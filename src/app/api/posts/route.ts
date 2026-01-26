@@ -86,10 +86,13 @@ export async function POST(request: Request) {
             videoCount: body.video_urls?.length || 0,
         });
 
-        // Validate content
-        if (!body.content || body.content.trim().length === 0) {
+        // Validate that post has either content or media
+        const hasContent = body.content && body.content.trim().length > 0;
+        const hasMedia = (body.image_urls && body.image_urls.length > 0) || (body.video_urls && body.video_urls.length > 0);
+
+        if (!hasContent && !hasMedia) {
             return NextResponse.json(
-                { success: false, error: "Post content is required" },
+                { success: false, error: "Post must have either content or media" },
                 { status: 400 }
             );
         }
@@ -99,7 +102,7 @@ export async function POST(request: Request) {
             .from("posts")
             .insert({
                 user_id: user.id,
-                content: body.content.trim(),
+                content: body.content?.trim() || "",
                 image_urls: body.image_urls || [],
                 video_urls: body.video_urls || [],
             })
