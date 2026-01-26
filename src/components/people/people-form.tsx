@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { PeopleService } from "@/server/services/people.service";
 import type { PeopleUser } from "@/app/api/peoples/route";
+import type { FollowStatusMap } from "@/types";
 import { Spinner } from "../ui/Spinner";
 
 export default function PeopleForm() {
     const [users, setUsers] = useState<PeopleUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [followStatus, setFollowStatus] = useState<FollowStatusMap>({});
+    const [followLoading, setFollowLoading] = useState<{ [key: string]: boolean }>({});
 
     useEffect(() => {
         async function fetchPeoples() {
@@ -18,6 +21,15 @@ export default function PeopleForm() {
 
                 if (result.success && result.data) {
                     setUsers(result.data);
+
+                    // Fetch follow status for all users
+                    const userIds = result.data.map(user => user.id);
+                    if (userIds.length > 0) {
+                        const statusResult = await PeopleService.getFollowStatusMap(userIds);
+                        if (statusResult.success && statusResult.data) {
+                            setFollowStatus(statusResult.data);
+                        }
+                    }
                 } else {
                     setError(result.error || "Failed to load users");
                 }
@@ -30,6 +42,37 @@ export default function PeopleForm() {
 
         fetchPeoples();
     }, []);
+
+    const handleFollowToggle = async (userId: string) => {
+        try {
+            setFollowLoading(prev => ({ ...prev, [userId]: true }));
+
+            const isCurrentlyFollowing = followStatus[userId];
+
+            let result;
+            if (isCurrentlyFollowing) {
+                result = await PeopleService.unfollowUser(userId);
+            } else {
+                result = await PeopleService.followUser(userId);
+            }
+
+            if (result.success) {
+                // Update follow status
+                setFollowStatus(prev => ({
+                    ...prev,
+                    [userId]: !isCurrentlyFollowing
+                }));
+            } else {
+                setError(result.error || "Failed to update follow status");
+                setTimeout(() => setError(null), 3000);
+            }
+        } catch (err) {
+            setError("An unexpected error occurred");
+            setTimeout(() => setError(null), 3000);
+        } finally {
+            setFollowLoading(prev => ({ ...prev, [userId]: false }));
+        }
+    };
 
     if (loading) {
         return (
@@ -86,30 +129,60 @@ export default function PeopleForm() {
             <h1 className="text-2xl font-bold mb-6">People</h1>
 
             <div className="flex flex-col gap-4">
-                {users.map((user) => (
-                    <div
-                        key={user.id}
-                        className="border rounded-xl p-4 flex items-center gap-4"
-                    >
-                        {/* Avatar */}
-                        <img
-                            src={user.avatar_url || "/avatar.png"}
-                            alt={user?.full_name || user?.username || "User"}
-                            className="w-12 h-12 rounded-full object-cover"
-                        />
+                {users.map((user) => {
+                    const isFollowing = followStatus[user.id] || false;
+                    const isLoading = followLoading[user.id] || false;
 
-                        {/* Info */}
-                        <div>
-                            <p className="font-semibold">{user?.full_name || user?.username}</p>
-                            <p className="text-sm text-gray-500">@{user?.email}</p>
-                            {user.bio && (
-                                <p className="text-xs text-gray-400 mt-1 line-clamp-2">
-                                    {user.bio}
-                                </p>
-                            )}
+                    return (
+                        <div
+                            key={user.id}
+                            className="border rounded-xl p-4 flex items-center gap-4 justify-between"
+                        >
+                            <div className="flex items-center gap-4 flex-1">
+                                {/* Avatar */}
+                                <img
+                                    src={user.avatar_url || "/avatar.png"}
+                                    alt={user?.full_name || user?.username || "User"}
+                                    className="w-12 h-12 rounded-full object-cover"
+                                />
+
+                                {/* Info */}
+                                <div className="flex-1">
+                                    <p className="font-semibold">{user?.full_name || user?.username}</p>
+                                    <p className="text-sm text-gray-500">@{user?.email}</p>
+                                    {user.bio && (
+                                        <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                                            {user.bio}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Follow Button */}
+                            <button
+                                onClick={() => handleFollowToggle(user.id)}
+                                disabled={isLoading}
+                                className={`
+                                    px-6 py-2 rounded-lg font-medium transition-all duration-200
+                                    ${isFollowing
+                                        ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                                    }
+                                    disabled:opacity-50 disabled:cursor-not-allowed
+                                    min-w-[110px] flex items-center justify-center
+                                `}
+                            >
+                                {isLoading ? (
+                                    <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                ) : isFollowing ? (
+                                    'Following'
+                                ) : (
+                                    'Follow'
+                                )}
+                            </button>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

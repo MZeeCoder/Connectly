@@ -10,6 +10,8 @@ export interface ProfileUser {
     avatar_url: string | null;
     bio: string | null;
     created_at: string;
+    followers_count: number;
+    following_count: number;
 }
 
 /**
@@ -58,12 +60,42 @@ export async function GET() {
             );
         }
 
-        Logger.success("ProfileAPI", "Profile fetched successfully");
+        // Get followers count
+        Logger.db("ProfileAPI", "COUNT", "follows (followers)");
+        const { count: followersCount, error: followersError } = await supabase
+            .from("follows")
+            .select("*", { count: "exact", head: true })
+            .eq("following_id", user.id);
+
+        // Get following count
+        Logger.db("ProfileAPI", "COUNT", "follows (following)");
+        const { count: followingCount, error: followingError } = await supabase
+            .from("follows")
+            .select("*", { count: "exact", head: true })
+            .eq("follower_id", user.id);
+
+        if (followersError || followingError) {
+            Logger.warn("ProfileAPI", "Error fetching follow counts", {
+                followersError: followersError?.message,
+                followingError: followingError?.message,
+            });
+        }
+
+        const profileWithCounts: ProfileUser = {
+            ...data,
+            followers_count: followersCount || 0,
+            following_count: followingCount || 0,
+        };
+
+        Logger.success("ProfileAPI", "Profile fetched successfully", {
+            followers: followersCount || 0,
+            following: followingCount || 0,
+        });
         timer.end("Profile retrieved");
 
         return NextResponse.json({
             success: true,
-            data: data as ProfileUser,
+            data: profileWithCounts,
         });
     } catch (error) {
         Logger.error("ProfileAPI", "Failed to fetch profile", {

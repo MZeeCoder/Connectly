@@ -252,11 +252,11 @@ function ProfilePanel() {
                     </div>
                     <div className="flex justify-between text-xs">
                         <span className="text-gray-400">Followers</span>
-                        <span className="text-white font-medium">0</span>
+                        <span className="text-white font-medium">{profile?.followers_count || 0}</span>
                     </div>
                     <div className="flex justify-between text-xs">
                         <span className="text-gray-400">Following</span>
-                        <span className="text-white font-medium">0</span>
+                        <span className="text-white font-medium">{profile?.following_count || 0}</span>
                     </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-[#3A3B3C]">

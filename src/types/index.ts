@@ -10,6 +10,35 @@ export interface User {
     updated_at: string;
 }
 
+// Follow Types
+export interface FollowRelationship {
+    id: string;
+    follower_id: string;
+    following_id: string;
+    created_at: string;
+}
+
+export interface FollowStatus {
+    isFollowing: boolean;
+    followId?: string;
+}
+
+export interface FollowStatusMap {
+    [userId: string]: boolean;
+}
+
+export interface FollowerWithUser {
+    id: string;
+    created_at: string;
+    follower: User;
+}
+
+export interface FollowingWithUser {
+    id: string;
+    created_at: string;
+    following: User;
+}
+
 // Post Types
 export interface Post {
     id: string;

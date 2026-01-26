@@ -96,6 +96,46 @@ export default function ProfileClient() {
 
     return (
         <div className="mx-auto max-w-4xl">
+            {/* Profile Header */}
+            <div className="bg-card border border-border rounded-lg p-6 mb-6">
+                <div className="flex items-start gap-6">
+                    <Avatar
+                        src={profile.avatar_url || undefined}
+                        alt={profile.full_name || profile.username}
+                        size="lg"
+                    />
+                    <div className="flex-1">
+                        <h1 className="text-2xl font-bold text-foreground">
+                            {profile.full_name || profile.username}
+                        </h1>
+                        <p className="text-muted-foreground">@{profile.username}</p>
+                        {profile.bio && (
+                            <p className="mt-2 text-foreground">{profile.bio}</p>
+                        )}
+                        <div className="flex gap-6 mt-4">
+                            <div className="text-center">
+                                <p className="text-2xl font-bold text-foreground">
+                                    {posts.length}
+                                </p>
+                                <p className="text-sm text-muted-foreground">Posts</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-2xl font-bold text-foreground">
+                                    {profile.followers_count}
+                                </p>
+                                <p className="text-sm text-muted-foreground">Followers</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-2xl font-bold text-foreground">
+                                    {profile.following_count}
+                                </p>
+                                <p className="text-sm text-muted-foreground">Following</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* User Posts Section */}
             <div>
                 <h2 className="text-2xl font-bold mb-4 text-foreground">My Posts</h2>
@@ -135,9 +175,11 @@ export default function ProfileClient() {
                                 currentUser={profile ? {
                                     id: profile.id,
                                     username: profile.username,
-                                    full_name: profile.full_name,
+                                    full_name: profile.full_name ?? undefined,
                                     email: profile.email,
-                                    avatar_url: profile.avatar_url,
+                                    avatar_url: profile.avatar_url ?? undefined,
+                                    created_at: profile.created_at,
+                                    updated_at: profile.created_at,
                                 } : null}
                             />
                         ))}
