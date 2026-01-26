@@ -1,13 +1,23 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ContentPanel } from "@/components/layout/ContentPanel";
 import RouteProgress from "@/components/layout/RouteProgress";
 
 export default function HomeLayout({ children }: { children: ReactNode }) {
-    const [activeSection, setActiveSection] = useState<"feed" | "messages" | "profile" | null>(null);
+    const pathname = usePathname();
+
+    // Determine active section from pathname
+    const getActiveSection = (): "feed" | "messages" | "profile" | null => {
+        if (pathname.startsWith("/feed")) return "feed";
+        if (pathname.startsWith("/messages")) return "messages";
+        if (pathname.startsWith("/profile")) return "profile";
+        return null;
+    };
+
+    const activeSection = getActiveSection();
 
     return (
         <div className="flex min-h-screen flex-col">
@@ -25,7 +35,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
 
             <div className="flex flex-1 bg-[#1E1F20] ">
                 {/* Primary Navigation Sidebar */}
-                <Sidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+                <Sidebar activeSection={activeSection} />
 
                 {/* Secondary Content Panel */}
                 <ContentPanel section={activeSection} />

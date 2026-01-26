@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { APP_ROUTES } from "@/lib/constants";
 import { cn } from "@/utils/cn";
 import { useState, useRef, useEffect } from "react";
 
 interface SidebarProps {
     activeSection: "feed" | "messages" | "profile" | null;
-    onSectionChange: (section: "feed" | "messages" | "profile" | null) => void;
 }
 
 const sidebarItems = [
@@ -57,9 +56,8 @@ const sidebarItems = [
     },
 ];
 
-export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
+export function Sidebar({ activeSection }: SidebarProps) {
     const pathname = usePathname();
-    const router = useRouter();
     const [isHovered, setIsHovered] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -78,13 +76,6 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
         }
     }, [showProfileMenu]);
 
-    const handleSectionClick = (sectionId: "feed" | "messages" | "profile", href: string) => {
-        // Toggle: if clicking the same section, close it; otherwise, open the new section
-        onSectionChange(activeSection === sectionId ? null : sectionId);
-        // Navigate to the route
-        router.push(href);
-    };
-
     return (
         <aside
             className={cn(
@@ -100,9 +91,9 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                     const isActive = activeSection === item.id;
 
                     return (
-                        <button
+                        <Link
                             key={item.id}
-                            onClick={() => handleSectionClick(item.id, item.href)}
+                            href={item.href}
                             className={cn(
                                 "flex items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",
                                 isActive
@@ -122,19 +113,16 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                             >
                                 {item.label}
                             </span>
-                        </button>
+                        </Link>
                     );
                 })}
             </nav>
 
             {/* Profile Section at Bottom */}
             <div className="relative border-t border-[#3A3B3C] p-2" ref={profileMenuRef}>
-                <button
-                    onClick={() => {
-                        setShowProfileMenu(!showProfileMenu);
-                        onSectionChange(showProfileMenu ? null : "profile");
-                        router.push(APP_ROUTES.PROFILE);
-                    }}
+                <Link
+                    href={APP_ROUTES.PROFILE}
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
                     className={cn(
                         "flex w-full items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",
                         activeSection === "profile"
@@ -171,7 +159,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                             <polyline points="6 9 12 15 18 9" />
                         </svg>
                     </div>
-                </button>
+                </Link>
             </div>
         </aside>
     );

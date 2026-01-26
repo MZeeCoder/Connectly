@@ -114,7 +114,6 @@ export async function GET(request: NextRequest) {
 
         // Redirect to dashboard
         const dashboardUrl = new URL("/feed", request.url);
-        dashboardUrl.searchParams.set("verified", "true");
         Logger.info("AuthCallback", "Redirecting to dashboard", { path: "/feed" });
         return NextResponse.redirect(dashboardUrl);
     } catch (err) {
