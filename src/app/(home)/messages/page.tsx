@@ -1,3 +1,4 @@
+"use client";
 import { MessageContent } from "@/components/messages/message-content";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";

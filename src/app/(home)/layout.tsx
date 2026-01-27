@@ -42,11 +42,11 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                 <Sidebar activeSection={activeSection} />
 
                 {/* Secondary Content Panel */}
-                {activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" && <ContentPanel section={activeSection} />}
+                {activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" && activeSection !== "profile" && <ContentPanel section={activeSection} />}
 
                 {/* Main Content Area */}
                 <main
-                    className={`flex-1 transition-all duration-300 mt-14 bg-card border-l border-border ${activeSection && activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" ? "lg:ml-[344px]" : "lg:ml-14 rounded-tl-xl"
+                    className={`flex-1 transition-all duration-300 mt-14 bg-card border-l border-border ${activeSection && activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" && activeSection !== "profile" ? "lg:ml-[344px]" : "lg:ml-14 rounded-tl-xl"
                         }`}
                 >
                     <div className="mx-auto px-4 py-6">{children}</div>

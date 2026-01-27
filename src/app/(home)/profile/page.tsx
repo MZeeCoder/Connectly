@@ -1,7 +1,11 @@
-import ProfileClient from "@/components/profile/ProfileClient";
+import { ProfileContent } from "@/components/profile/profile-content";
 
 export const dynamic = "force-dynamic";
 
 export default function ProfilePage() {
-    return <ProfileClient />;
+    return (
+        <div className="mx-auto h-full px-4 py-8">
+            <ProfileContent />
+        </div>
+    );
 }
