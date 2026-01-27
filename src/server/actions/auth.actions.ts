@@ -301,10 +301,14 @@ export async function MagicLinkLoginAction(data: { email: string }) {
       },
     };
   } catch (error) {
-    Logger.error("MagicLinkLoginAction", "Unexpected error sending magic link", {
-      error: error instanceof Error ? error.message : String(error),
-      stack: error instanceof Error ? error.stack : undefined,
-    });
+    Logger.error(
+      "MagicLinkLoginAction",
+      "Unexpected error sending magic link",
+      {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      },
+    );
     return {
       success: false,
       error:
