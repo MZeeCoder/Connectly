@@ -10,6 +10,35 @@ export interface User {
     updated_at: string;
 }
 
+// Follow Types
+export interface FollowRelationship {
+    id: string;
+    follower_id: string;
+    following_id: string;
+    created_at: string;
+}
+
+export interface FollowStatus {
+    isFollowing: boolean;
+    followId?: string;
+}
+
+export interface FollowStatusMap {
+    [userId: string]: boolean;
+}
+
+export interface FollowerWithUser {
+    id: string;
+    created_at: string;
+    follower: User;
+}
+
+export interface FollowingWithUser {
+    id: string;
+    created_at: string;
+    following: User;
+}
+
 // Post Types
 export interface Post {
     id: string;
@@ -17,11 +46,32 @@ export interface Post {
     content: string;
     image_url?: string;
     video_url?: string;
+    image_urls?: string[];
+    video_urls?: string[];
     likes_count: number;
     comments_count: number;
     created_at: string;
     updated_at: string;
     user?: User;
+}
+
+// Media Upload Types
+export interface MediaUploadResult {
+    url: string;
+    path: string;
+    type: 'image' | 'video';
+}
+
+export interface CreatePostData {
+    content: string;
+    image_urls?: string[];
+    video_urls?: string[];
+}
+
+export interface UpdatePostData {
+    content?: string;
+    image_urls?: string[];
+    video_urls?: string[];
 }
 
 // Comment Types

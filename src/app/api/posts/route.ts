@@ -1,19 +1,31 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { PostService } from "@/server/services/post.service";
 import { Logger } from "@/utils/logger";
+import type { CreatePostData } from "@/types";
 
 /**
- * GET /api/posts - Get all posts
+ * GET /api/posts - Get all posts (with optional user filter)
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
     const timer = Logger.timer("PostsAPI", "GET /api/posts");
 
     try {
         Logger.request("PostsAPI", "GET", "/api/posts");
 
-        Logger.debug("PostsAPI", "Fetching posts from PostService");
-        const posts = await PostService.getFeed();
+        const { searchParams } = new URL(request.url);
+        const userId = searchParams.get("userId");
+        const page = parseInt(searchParams.get("page") || "1");
+        const pageSize = parseInt(searchParams.get("pageSize") || "20");
+
+        Logger.debug("PostsAPI", "Fetching posts", { userId, page, pageSize });
+
+        let posts;
+        if (userId) {
+            posts = await PostService.getPostsByUserId(userId);
+        } else {
+            posts = await PostService.getFeed(page, pageSize);
+        }
 
         Logger.success("PostsAPI", "Posts fetched successfully", {
             count: posts.length,
@@ -67,23 +79,37 @@ export async function POST(request: Request) {
             email: user.email,
         });
 
-        const body = await request.json();
+        const body: CreatePostData = await request.json();
         Logger.debug("PostsAPI", "Post data received", {
             hasContent: !!body.content,
-            hasImage: !!body.image_url,
-            hasVideo: !!body.video_url,
+            imageCount: body.image_urls?.length || 0,
+            videoCount: body.video_urls?.length || 0,
         });
+
+        // Validate that post has either content or media
+        const hasContent = body.content && body.content.trim().length > 0;
+        const hasMedia = (body.image_urls && body.image_urls.length > 0) || (body.video_urls && body.video_urls.length > 0);
+
+        if (!hasContent && !hasMedia) {
+            return NextResponse.json(
+                { success: false, error: "Post must have either content or media" },
+                { status: 400 }
+            );
+        }
 
         Logger.db("PostsAPI", "INSERT", "posts");
         const { data, error } = await supabase
             .from("posts")
             .insert({
                 user_id: user.id,
-                content: body.content,
-                image_url: body.image_url,
-                video_url: body.video_url,
+                content: body.content?.trim() || "",
+                image_urls: body.image_urls || [],
+                video_urls: body.video_urls || [],
             })
-            .select()
+            .select(`
+                *,
+                user:accounts(*)
+            `)
             .single();
 
         if (error) {

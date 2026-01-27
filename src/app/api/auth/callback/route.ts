@@ -31,16 +31,10 @@ export async function GET(request: NextRequest) {
     hasError: !!error,
   });
 
-  // Handle error from Supabase
-  if (error) {
-    Logger.error("AuthCallback", "Error received from Supabase", {
-      error,
-      errorDescription,
-    });
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("error", errorDescription || error);
-    return NextResponse.redirect(loginUrl);
-  }
+  // Session is automatically handled by Supabase SSR
+  // Cookies are set via the createClient response headers
+  Logger.auth("AuthCallback", "Session established successfully");
+  timer.end("Callback processed successfully");
 
   // Verify we have at least one authentication parameter
   if (!token_hash && !token && !code) {
@@ -114,7 +108,6 @@ export async function GET(request: NextRequest) {
 
     // Redirect to dashboard
     const dashboardUrl = new URL("/feed", request.url);
-    dashboardUrl.searchParams.set("verified", "true");
     Logger.info("AuthCallback", "Redirecting to dashboard", { path: "/feed" });
     return NextResponse.redirect(dashboardUrl);
   } catch (err) {

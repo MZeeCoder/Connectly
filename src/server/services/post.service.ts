@@ -3,6 +3,21 @@ import { DEFAULT_PAGE_SIZE } from "@/lib/constants";
 import type { Post } from "@/types";
 import { Logger } from "@/utils/logger";
 
+// Select query for posts with user info
+const POST_SELECT_QUERY = `
+    id,
+    user_id,
+    content,
+    image_url,
+    image_urls,
+    video_urls,
+    likes_count,
+    comments_count,
+    created_at,
+    updated_at,
+    user:accounts(*)
+`;
+
 /**
  * Post service - handles all post-related database operations
  */
@@ -25,12 +40,7 @@ export class PostService {
             Logger.db("PostService", "SELECT", "posts");
             const { data, error } = await supabase
                 .from("posts")
-                .select(`
-        *,
-        user:accounts(*),
-        likes(count),
-        comments(count)
-      `)
+                .select(POST_SELECT_QUERY)
                 .order("created_at", { ascending: false })
                 .range(offset, offset + pageSize - 1);
 
@@ -49,7 +59,7 @@ export class PostService {
             });
             timer.end("Feed fetched");
 
-            return data as Post[];
+            return data as unknown as Post[];
         } catch (error) {
             Logger.error("PostService", "Unexpected error in getFeed", {
                 error: error instanceof Error ? error.message : String(error),
@@ -73,12 +83,7 @@ export class PostService {
             Logger.db("PostService", "SELECT", "posts");
             const { data, error } = await supabase
                 .from("posts")
-                .select(`
-        *,
-        user:accounts(*),
-        likes(count),
-        comments(count)
-      `)
+                .select(POST_SELECT_QUERY)
                 .eq("id", postId)
                 .single();
 
@@ -95,7 +100,7 @@ export class PostService {
             });
             timer.end("Post fetched");
 
-            return data as Post;
+            return data as unknown as Post;
         } catch (error) {
             Logger.error("PostService", "Unexpected error in getPostById", {
                 postId,
@@ -119,12 +124,7 @@ export class PostService {
             Logger.db("PostService", "SELECT", "posts");
             const { data, error } = await supabase
                 .from("posts")
-                .select(`
-        *,
-        user:accounts(*),
-        likes(count),
-        comments(count)
-      `)
+                .select(POST_SELECT_QUERY)
                 .eq("user_id", userId)
                 .order("created_at", { ascending: false });
 
@@ -143,7 +143,7 @@ export class PostService {
             });
             timer.end("User posts fetched");
 
-            return data as Post[];
+            return data as unknown as Post[];
         } catch (error) {
             Logger.error("PostService", "Unexpected error in getPostsByUserId", {
                 userId,
