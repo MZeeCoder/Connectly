@@ -1,59 +1,49 @@
-"use client";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { User } from 'lucide-react';
 
-import * as React from "react";
-import { cn } from "@/utils/cn";
-
-export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-    src?: string;
-    alt?: string;
-    fallback?: string;
-    size?: "sm" | "md" | "lg" | "xl";
+interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
+  src?: string;
+  alt?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  fallback?: string;
 }
 
-const sizeClasses = {
-    sm: "h-8 w-8 text-xs",
-    md: "h-10 w-10 text-sm",
-    lg: "h-12 w-12 text-base",
-    xl: "h-16 w-16 text-lg",
-};
+export function Avatar({ src, alt, size = 'md', fallback, className, ...props }: AvatarProps) {
+  const [error, setError] = React.useState(false);
 
-const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
-    ({ src, alt, fallback, size = "md", className, ...props }, ref) => {
-        const [imageError, setImageError] = React.useState(false);
+  const sizes = {
+    sm: 'h-8 w-8',
+    md: 'h-10 w-10',
+    lg: 'h-14 w-14',
+    xl: 'h-24 w-24',
+  };
 
-        const getFallbackText = () => {
-            if (fallback) return fallback;
-            if (alt) return alt.charAt(0).toUpperCase();
-            return "?";
-        };
-
-        return (
-            <div
-                ref={ref}
-                className={cn(
-                    "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted",
-                    sizeClasses[size],
-                    className
-                )}
-                {...props}
-            >
-                {src && !imageError ? (
-                    <img
-                        src={src}
-                        alt={alt || "Avatar"}
-                        className="h-full w-full object-cover"
-                        onError={() => setImageError(true)}
-                    />
-                ) : (
-                    <span className="font-medium text-muted-foreground">
-                        {getFallbackText()}
-                    </span>
-                )}
-            </div>
-        );
-    }
-);
-
-Avatar.displayName = "Avatar";
-
-export { Avatar };
+  return (
+    <div
+      className={cn(
+        'relative flex shrink-0 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700',
+        sizes[size],
+        className
+      )}
+      {...props}
+    >
+      {src && !error ? (
+        <img
+          src={src}
+          alt={alt}
+          onError={() => setError(true)}
+          className="aspect-square h-full w-full object-cover"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 font-medium">
+          {fallback ? (
+            fallback.slice(0, 2).toUpperCase()
+          ) : (
+            <User className="h-1/2 w-1/2" />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
