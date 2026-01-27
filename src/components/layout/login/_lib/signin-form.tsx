@@ -202,7 +202,7 @@ export default function SinginForm() {
 
                 {/* Magic Link Login Form */}
                 <form onSubmit={handleMagicLinkSubmit} className="space-y-3">
-                    <div className="space-y-1.5">
+                    <div className="">
                         <label className="text-white text-sm font-medium">
                             Email Magic Link
                         </label>
@@ -212,7 +212,7 @@ export default function SinginForm() {
                             type="email"
                             value={magicLinkEmail}
                             onChange={(e) => setMagicLinkEmail(e.target.value)}
-                            className="bg-gray text-white placeholder-gray-500 border-0"
+                            className="bg-gray mt-1 text-white placeholder-gray-500 border-0"
                             required
                             disabled={isSendingMagicLink}
                         />
