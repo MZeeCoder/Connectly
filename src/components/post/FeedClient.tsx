@@ -153,8 +153,8 @@ export function FeedClient({ initialPosts }: FeedClientProps) {
     };
 
     return (
-        <div className="space-y-6">
-            {/* Create Post Button */}
+        <div className="relative flex h-full flex-col">
+            {/* Fixed Create Post Button - Sticky at top with high z-index */}
             {isAuthenticated && (
                 <div className="bg-white border border-slate-100 rounded-4xl shadow-sm p-6 space-y-4">
                     <div className="flex items-center gap-4">
@@ -206,92 +206,104 @@ export function FeedClient({ initialPosts }: FeedClientProps) {
                 </div>
             )}
 
-            {/* Refresh Button */}
-            <div className="flex justify-end">
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={refreshPosts}
-                    disabled={isRefreshing}
-                >
-                    {isRefreshing ? (
-                        <>
-                            <Spinner size="sm" />
-                            Refreshing...
-                        </>
-                    ) : (
-                        <>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <polyline points="23 4 23 10 17 10" />
-                                <polyline points="1 20 1 14 7 14" />
-                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                            </svg>
-                            Refresh
-                        </>
-                    )}
-                </Button>
-            </div>
+            {/* Scrollable Content Area */}
+            <div className="flex-1 overflow-y-auto scroll-smooth">
+                <div className="space-y-4 sm:space-y-6">
+                    {/* Refresh Button */}
+                    <div className="flex justify-end animate-in fade-in slide-in-from-top-6 duration-500">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={refreshPosts}
+                            disabled={isRefreshing}
+                            className="transition-all duration-300 hover:scale-105 active:scale-95"
+                        >
+                            {isRefreshing ? (
+                                <>
+                                    <Spinner size="sm" />
+                                    Refreshing...
+                                </>
+                            ) : (
+                                <>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="transition-transform duration-300 hover:rotate-180"
+                                    >
+                                        <polyline points="23 4 23 10 17 10" />
+                                        <polyline points="1 20 1 14 7 14" />
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                                    </svg>
+                                    Refresh
+                                </>
+                            )}
+                        </Button>
+                    </div>
 
-            {/* Posts List */}
-            <div className="space-y-6">
-                {posts.map((post) => (
-                    <PostCard
-                        key={post.id}
-                        post={post}
-                        currentUser={currentUser}
-                        onEdit={handleEditPost}
-                        onDelete={handleDeletePost}
-                        onLike={handleLikePost}
-                        onComment={handleCommentPost}
-                    />
-                ))}
+                    {/* Posts List */}
+                    <div className="space-y-6 pb-6">
+                        {posts.map((post, index) => (
+                            <div
+                                key={post.id}
+                                className="animate-in fade-in slide-in-from-bottom-4 duration-700"
+                                style={{ animationDelay: `${index * 100}ms` }}
+                            >
+                                <PostCard
+                                    post={post}
+                                    currentUser={currentUser}
+                                    onEdit={handleEditPost}
+                                    onDelete={handleDeletePost}
+                                    onLike={handleLikePost}
+                                    onComment={handleCommentPost}
+                                />
+                            </div>
+                        ))}
 
-                {posts.length === 0 && (
-                    <div className="rounded-lg border border-border bg-card p-12 text-center">
-                        <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-muted flex items-center justify-center">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="32"
-                                height="32"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="text-muted-foreground"
-                            >
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                            </svg>
-                        </div>
-                        <h3 className="mb-2 text-lg font-semibold text-foreground">
-                            No posts yet
-                        </h3>
-                        <p className="text-muted-foreground">
-                            {isAuthenticated
-                                ? "Be the first to share something!"
-                                : "Sign in to see and create posts."}
-                        </p>
-                        {isAuthenticated && (
-                            <Button
-                                onClick={() => setIsCreateModalOpen(true)}
-                                className="mt-4"
-                            >
-                                Create Post
-                            </Button>
+                        {posts.length === 0 && (
+                            <div className="animate-in fade-in zoom-in-95 duration-700 rounded-lg border border-border bg-card p-12 text-center">
+                                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted transition-all duration-300 hover:scale-110">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="32"
+                                        height="32"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="text-muted-foreground"
+                                    >
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                </div>
+                                <h3 className="mb-2 text-lg font-semibold text-foreground">
+                                    No posts yet
+                                </h3>
+                                <p className="text-muted-foreground">
+                                    {isAuthenticated
+                                        ? "Be the first to share something!"
+                                        : "Sign in to see and create posts."}
+                                </p>
+                                {isAuthenticated && (
+                                    <Button
+                                        onClick={() => setIsCreateModalOpen(true)}
+                                        className="mt-4 transition-all duration-300 hover:scale-105 active:scale-95"
+                                    >
+                                        Create Post
+                                    </Button>
+                                )}
+                            </div>
                         )}
                     </div>
-                )}
+                </div>
             </div>
 
             {/* Create/Edit Post Modal */}
