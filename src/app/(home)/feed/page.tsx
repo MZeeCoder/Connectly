@@ -13,7 +13,7 @@ async function FeedContent() {
 
 export default function FeedPage() {
     return (
-        <div className="mx-auto max-w-2xl">
+        <div className="mx-auto max-w-xl">
             <h1 className="mb-6 text-3xl font-bold text-foreground">Feed</h1>
             <Suspense
                 fallback={

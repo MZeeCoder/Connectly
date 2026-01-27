@@ -1,7 +1,7 @@
 "use client";
 
-import PeopleForm from "@/components/people/people-form";
+import { redirect } from "next/navigation";
 
 export default function PeoplePage() {
-    return <PeopleForm />;
+    redirect("/feed");
 }

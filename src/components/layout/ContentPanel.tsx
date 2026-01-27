@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { ProfileService } from "@/server/services/profile.service";
 import type { ProfileUser } from "@/app/api/profile/route";
 import LogoutButton from "@/components/auth/LogoutButton";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ContentPanelProps {
-    section: "feed" | "messages" | "profile" | null;
+    section: "feed" | "messages" | "profile" | "explore" | "notifications" | "settings" | null;
 }
 
 export function ContentPanel({ section }: ContentPanelProps) {
@@ -78,12 +79,16 @@ function FeedPanel() {
 }
 
 function MessagesPanel() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const currentUserId = searchParams.get("userId");
+
     const conversations = [
-        { id: 1, name: "John Doe", lastMessage: "Hey, how are you?", time: "2:30 PM", unread: 2 },
-        { id: 2, name: "Jane Smith", lastMessage: "Thanks for the help!", time: "1:15 PM", unread: 0 },
-        { id: 3, name: "Mike Johnson", lastMessage: "See you tomorrow", time: "Yesterday", unread: 0 },
-        { id: 4, name: "Sarah Wilson", lastMessage: "That sounds great!", time: "Yesterday", unread: 1 },
-        { id: 5, name: "Team Chat", lastMessage: "Meeting at 3 PM", time: "Monday", unread: 5 },
+        { id: "1", name: "Alice Freeman", lastMessage: "Sure thing, send them over.", time: "10:12 AM", unread: 0 },
+        { id: "2", name: "John Doe", lastMessage: "Hey, how are you?", time: "2:30 PM", unread: 2 },
+        { id: "3", name: "Jane Smith", lastMessage: "Thanks for the help!", time: "1:15 PM", unread: 0 },
+        { id: "4", name: "Mike Johnson", lastMessage: "See you tomorrow", time: "Yesterday", unread: 0 },
+        { id: "5", name: "Sarah Wilson", lastMessage: "That sounds great!", time: "Yesterday", unread: 1 },
     ];
 
     return (
@@ -118,7 +123,11 @@ function MessagesPanel() {
                 {conversations.map((conv) => (
                     <button
                         key={conv.id}
-                        className="w-full flex items-start gap-3 px-4 py-3 hover:bg-accent transition-colors border-b border-border"
+                        onClick={() => router.push(`/messages?userId=${conv.id}`)}
+                        className={cn(
+                            "w-full flex items-start gap-4 px-4 py-4 hover:bg-slate-50 transition-all border-b border-slate-50",
+                            currentUserId === conv.id ? "bg-slate-50 border-l-4 border-l-primary" : ""
+                        )}
                     >
                         <div className="w-10 h-10 rounded-full bg-primary flex-shrink-0 flex items-center justify-center">
                             <span className="text-primary-foreground text-sm font-semibold">
@@ -266,3 +275,58 @@ function ProfilePanel() {
         </div>
     );
 }
+
+function ExplorePanel() {
+    return (
+        <div className="p-4">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Explore</h2>
+            <div className="space-y-4">
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Explore Connectly..."
+                        className="w-full bg-accent border border-border rounded-lg px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                    />
+                </div>
+                <div className="space-y-2">
+                    {["Trending", "News", "Sports", "Entertainment"].map((item) => (
+                        <button
+                            key={item}
+                            className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:bg-accent rounded-lg transition-colors"
+                        >
+                            #{item}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+function SettingsPanel() {
+    return (
+        <div className="p-4">
+            <h2 className="text-lg font-semibold text-foreground mb-4">Settings</h2>
+            <div className="space-y-1">
+                {[
+                    { label: "Account", icon: "👤" },
+                    { label: "Privacy", icon: "🔒" },
+                    { label: "Notifications", icon: "🔔" },
+                    { label: "Appearance", icon: "🎨" },
+                    { label: "Help Center", icon: "❓" },
+                ].map((item) => (
+                    <button
+                        key={item.label}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:bg-accent rounded-lg transition-colors"
+                    >
+                        <span>{item.icon}</span>
+                        <span>{item.label}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+}
+

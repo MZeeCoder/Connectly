@@ -5,15 +5,19 @@ import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { ContentPanel } from "@/components/layout/ContentPanel";
 import RouteProgress from "@/components/layout/RouteProgress";
+import PeopleForm from "@/components/people/people-form";
 
 export default function HomeLayout({ children }: { children: ReactNode }) {
     const pathname = usePathname();
 
     // Determine active section from pathname
-    const getActiveSection = (): "feed" | "messages" | "profile" | null => {
+    const getActiveSection = (): "feed" | "messages" | "profile" | "explore" | "notifications" | "settings" | null => {
         if (pathname.startsWith("/feed")) return "feed";
         if (pathname.startsWith("/messages")) return "messages";
         if (pathname.startsWith("/profile")) return "profile";
+        if (pathname.startsWith("/explore")) return "explore";
+        if (pathname.startsWith("/notifications")) return "notifications";
+        if (pathname.startsWith("/settings")) return "settings";
         return null;
     };
 
@@ -38,15 +42,16 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                 <Sidebar activeSection={activeSection} />
 
                 {/* Secondary Content Panel */}
-                <ContentPanel section={activeSection} />
+                {activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" && <ContentPanel section={activeSection} />}
 
                 {/* Main Content Area */}
                 <main
-                    className={`flex-1 transition-all duration-300 mt-14 bg-card border-l border-border ${activeSection ? "lg:ml-[272px]" : "lg:ml-14 rounded-tl-xl"
+                    className={`flex-1 transition-all duration-300 mt-14 bg-card border-l border-border ${activeSection && activeSection !== "notifications" && activeSection !== "explore" && activeSection !== "settings" ? "lg:ml-[344px]" : "lg:ml-14 rounded-tl-xl"
                         }`}
                 >
                     <div className="mx-auto px-4 py-6">{children}</div>
                 </main>
+                <PeopleForm />
             </div>
         </div>
     );

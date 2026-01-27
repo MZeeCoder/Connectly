@@ -125,65 +125,107 @@ export default function PeopleForm() {
     }
 
     return (
-        <div className="p-6 max-w-5xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">People</h1>
-
-            <div className="flex flex-col gap-4">
-                {users.map((user) => {
-                    const isFollowing = followStatus[user.id] || false;
-                    const isLoading = followLoading[user.id] || false;
-
-                    return (
-                        <div
-                            key={user.id}
-                            className="border border-border rounded-xl p-4 flex items-center gap-4 justify-between"
-                        >
-                            <div className="flex items-center gap-4 flex-1">
-                                {/* Avatar */}
-                                <img
-                                    src={user.avatar_url || "/avatar.png"}
-                                    alt={user?.full_name || user?.username || "User"}
-                                    className="w-12 h-12 rounded-full object-cover"
-                                />
-
-                                {/* Info */}
-                                <div className="flex-1">
-                                    <p className="font-semibold text-foreground">{user?.full_name || user?.username}</p>
-                                    <p className="text-sm text-muted-foreground">@{user?.email}</p>
-                                    {user.bio && (
-                                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                                            {user.bio}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Follow Button */}
-                            <button
-                                onClick={() => handleFollowToggle(user.id)}
-                                disabled={isLoading}
-                                className={`
-                                    px-6 py-2 rounded-lg font-medium transition-all duration-200
-                                    ${isFollowing
-                                        ? 'bg-muted text-foreground hover:bg-muted/80'
-                                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                                    }
-                                    disabled:opacity-50 disabled:cursor-not-allowed
-                                    min-w-[110px] flex items-center justify-center
-                                `}
-                            >
-                                {isLoading ? (
-                                    <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                                ) : isFollowing ? (
-                                    'Following'
-                                ) : (
-                                    'Follow'
-                                )}
-                            </button>
-                        </div>
-                    );
-                })}
+        <aside className="w-80 hidden lg:flex flex-col gap-6 p-4 bg-sidebar border-l border-border h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto">
+            {/* Search Bar */}
+            <div className="sticky top-0 bg-sidebar z-20 pb-4 -mx-4 px-4 pt-2">
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Search Connectly..."
+                        className="w-full bg-accent border border-border rounded-full px-11 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="absolute left-4 top-3 text-muted-foreground"
+                    >
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                </div>
             </div>
-        </div>
+
+            {/* Who to follow */}
+            <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-bold text-foreground px-1">Who to follow</h2>
+                <div className="flex flex-col gap-5">
+                    {users.slice(0, 3).map((user) => {
+                        const isFollowing = followStatus[user.id] || false;
+                        const isLoading = followLoading[user.id] || false;
+
+                        return (
+                            <div key={user.id} className="flex items-center gap-3 justify-between group">
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    <div className="relative shrink-0">
+                                        <img
+                                            src={user.avatar_url || "/avatar.png"}
+                                            alt={user?.full_name || user?.username || "User"}
+                                            className="w-10 h-10 rounded-full object-cover border border-border"
+                                        />
+                                        {/* Optional status indicator */}
+                                        <div className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-sidebar rounded-full"></div>
+                                    </div>
+                                    <div className="overflow-hidden">
+                                        <p className="font-bold text-sm text-foreground truncate leading-tight">
+                                            {user?.full_name || user?.username}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground truncate">
+                                            @{user?.username || user?.email?.split('@')[0]}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => handleFollowToggle(user.id)}
+                                    disabled={isLoading}
+                                    className={`
+                                        text-sm font-bold transition-all duration-200
+                                        ${isFollowing
+                                            ? 'text-muted-foreground hover:text-foreground'
+                                            : 'text-primary hover:text-primary/80'
+                                        }
+                                        disabled:opacity-50 disabled:cursor-not-allowed
+                                        shrink-0
+                                    `}
+                                >
+                                    {isLoading ? (
+                                        <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                    ) : isFollowing ? (
+                                        'Following'
+                                    ) : (
+                                        'Follow'
+                                    )}
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Trending */}
+            <div className="flex flex-col gap-4 mt-2">
+                <h2 className="text-xl font-bold text-foreground px-1">Trending</h2>
+                <div className="flex flex-col gap-3">
+                    {[
+                        { topic: "Tech", hashtag: "#FigmaAI", posts: "12.5k" },
+                        { topic: "Tech", hashtag: "#WebDesign", posts: "12.5k" },
+                        { topic: "Tech", hashtag: "#ReactJS", posts: "12.5k" },
+                    ].map((item, idx) => (
+                        <div key={idx} className="bg-accent/40 hover:bg-accent/60 p-4 rounded-2xl transition-colors cursor-pointer">
+                            <p className="text-xs text-muted-foreground mb-1">Trending in {item.topic}</p>
+                            <p className="text-base font-bold text-foreground mb-1">{item.hashtag}</p>
+                            <p className="text-xs text-muted-foreground">{item.posts} posts</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </aside>
     );
 }
