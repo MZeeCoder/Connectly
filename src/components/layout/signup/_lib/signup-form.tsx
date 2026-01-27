@@ -56,8 +56,8 @@ export default function SignupForm() {
     // Success state - show only success message
     if (isSuccess) {
         return (
-            <div className="flex items-center justify-center bg-[#0C0C0C] px-4">
-                <div className="w-full max-w-sm bg-gray-dark rounded-2xl p-6 space-y-5 shadow-lg animate-[slideDown_0.5s_ease-out]">
+            <div className="flex items-center justify-center bg-background px-4">
+                <div className="w-full max-w-sm bg-card rounded-2xl p-6 space-y-5 shadow-lg border border-border animate-[slideDown_0.5s_ease-out]">
                     {/* Success Message */}
                     <AlertMessage
                         type="success"
@@ -77,21 +77,21 @@ export default function SignupForm() {
     }
 
     return (
-        <div className="flex flex-col gap-3 items-center justify-center bg-[#0C0C0C] px-4">
+        <div className="flex flex-col gap-3 items-center justify-center bg-background px-4">
             {/* Connectly Logo */}
             <div className="flex items-center gap-2 mb-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">C</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                    <span className="text-primary-foreground font-bold text-xl">C</span>
                 </div>
-                <span className="text-white text-2xl font-bold">Connectly</span>
+                <span className="text-foreground text-2xl font-bold">Connectly</span>
             </div>
-            <div className="w-full max-w-sm bg-black rounded-2xl p-6 space-y-5 shadow-lg animate-[slideDown_0.5s_ease-out]">
+            <div className="w-full max-w-sm bg-card rounded-2xl p-6 space-y-5 shadow-lg border border-border animate-[slideDown_0.5s_ease-out]">
                 {/* Title */}
                 <div className="text-center space-y-1.5">
-                    <h1 className="text-2xl font-bold text-white">
+                    <h1 className="text-2xl font-bold text-foreground">
                         {authMessages.labels.createAccount}
                     </h1>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-muted-foreground text-sm">
                         {authMessages.labels.joinUs}
                     </p>
                 </div>
@@ -108,7 +108,7 @@ export default function SignupForm() {
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1.5">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Username
                         </label>
                         <Input
@@ -117,7 +117,7 @@ export default function SignupForm() {
                             placeholder="Enter your username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="bg-gray text-white placeholder-gray-500 border-0"
+                            className="bg-input-background text-foreground placeholder:text-muted-foreground border-0"
                             autoComplete="username"
                             name="username"
                             required
@@ -125,7 +125,7 @@ export default function SignupForm() {
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Email
                         </label>
                         <Input
@@ -134,7 +134,7 @@ export default function SignupForm() {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="bg-gray text-white placeholder-gray-500 border-0"
+                            className="bg-input-background text-foreground placeholder:text-muted-foreground border-0"
                             autoComplete="email"
                             name="email"
                             required
@@ -142,7 +142,7 @@ export default function SignupForm() {
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Password
                         </label>
                         <div className="relative">
@@ -152,7 +152,7 @@ export default function SignupForm() {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="pr-10 bg-gray text-white placeholder-gray-500 border-0"
+                                className="pr-10 bg-input-background text-foreground placeholder:text-muted-foreground border-0"
                                 autoComplete="new-password"
                                 name="password"
                                 required
@@ -160,7 +160,7 @@ export default function SignupForm() {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
                             </button>
@@ -178,7 +178,7 @@ export default function SignupForm() {
                 </form>
 
                 {/* Sign In Link */}
-                <div className="text-center text-gray-500 text-sm">
+                <div className="text-center text-muted-foreground text-sm">
                     {authMessages.labels.alreadyMember}{" "}
                     <Link href={APP_ROUTES.SIGN_IN} className="text-primary hover:underline">
                         {authMessages.labels.signIn}

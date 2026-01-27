@@ -106,13 +106,13 @@ export default function ResetPasswordForm() {
     if (recoveryState === "loading") {
         return (
             <div className="flex items-center justify-center bg-background px-4">
-                <div className="w-full max-w-sm bg-gray-dark rounded-xl p-8 space-y-6 shadow-lg">
+                <div className="w-full max-w-sm bg-card rounded-xl p-8 space-y-6 shadow-lg">
                     <div className="flex justify-center">
-                        <div className="w-16 h-16 bg-gray rounded-full flex items-center justify-center">
+                        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center">
                             <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
                         </div>
                     </div>
-                    <p className="text-center text-gray-400">Verifying recovery link...</p>
+                    <p className="text-center text-muted-foreground">Verifying recovery link...</p>
                 </div>
             </div>
         );
@@ -122,15 +122,15 @@ export default function ResetPasswordForm() {
     if (recoveryState === "invalid") {
         return (
             <div className="flex items-center justify-center bg-background px-4">
-                <div className="w-full max-w-sm bg-gray-dark rounded-xl p-8 space-y-6 shadow-lg">
+                <div className="w-full max-w-sm bg-card rounded-xl p-8 space-y-6 shadow-lg">
                     <div className="flex justify-center">
-                        <div className="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center text-red-500 text-3xl">
+                        <div className="w-16 h-16 bg-destructive/20 rounded-full flex items-center justify-center text-destructive text-3xl">
                             <FiAlertCircle />
                         </div>
                     </div>
                     <div className="text-center space-y-2">
-                        <h2 className="text-xl font-semibold text-white">Invalid or Expired Link</h2>
-                        <p className="text-gray-400 text-sm">
+                        <h2 className="text-xl font-semibold text-foreground">Invalid or Expired Link</h2>
+                        <p className="text-muted-foreground text-sm">
                             This password recovery link is invalid or has expired. Please request a new one.
                         </p>
                     </div>
@@ -148,15 +148,15 @@ export default function ResetPasswordForm() {
     if (success) {
         return (
             <div className="flex items-center justify-center bg-background px-4">
-                <div className="w-full max-w-sm bg-gray-dark rounded-xl p-8 space-y-6 shadow-lg animate-[slideDown_0.5s_ease-out]">
+                <div className="w-full max-w-sm bg-card rounded-xl p-8 space-y-6 shadow-lg animate-[slideDown_0.5s_ease-out]">
                     <div className="flex justify-center">
-                        <div className="w-16 h-16 bg-green-600/20 rounded-full flex items-center justify-center text-green-500 text-3xl">
+                        <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center text-primary text-3xl">
                             <FiCheckCircle />
                         </div>
                     </div>
                     <div className="text-center space-y-2">
-                        <h2 className="text-xl font-semibold text-white">Password Updated!</h2>
-                        <p className="text-gray-400 text-sm">
+                        <h2 className="text-xl font-semibold text-foreground">Password Updated!</h2>
+                        <p className="text-muted-foreground text-sm">
                             Your password has been successfully updated. Redirecting to login...
                         </p>
                     </div>
@@ -168,22 +168,22 @@ export default function ResetPasswordForm() {
     // Reset password form
     return (
         <div className="flex items-center justify-center bg-background px-4">
-            <div className="w-full max-w-sm bg-gray-dark rounded-xl p-8 space-y-6 shadow-lg animate-[slideDown_0.5s_ease-out]">
+            <div className="w-full max-w-sm bg-card rounded-xl p-8 space-y-6 shadow-lg animate-[slideDown_0.5s_ease-out]">
                 {/* Lock Icon */}
                 <div className="flex justify-center">
-                    <div className="w-16 h-16 bg-gray rounded-full flex items-center justify-center text-white text-2xl">
+                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center text-foreground text-2xl">
                         <FiLock />
                     </div>
                 </div>
 
                 <div className="text-center space-y-1">
-                    <h2 className="text-xl font-semibold text-white">Reset Password</h2>
-                    <p className="text-gray-400 text-sm">Enter your new password below</p>
+                    <h2 className="text-xl font-semibold text-foreground">Reset Password</h2>
+                    <p className="text-muted-foreground text-sm">Enter your new password below</p>
                 </div>
 
                 {/* Error Message */}
                 {error && (
-                    <div className="bg-red-600 text-white p-3 rounded text-sm flex items-center gap-2">
+                    <div className="bg-destructive text-destructive-foreground p-3 rounded text-sm flex items-center gap-2">
                         <FiAlertCircle className="shrink-0" />
                         <span>{error}</span>
                     </div>
@@ -198,15 +198,15 @@ export default function ResetPasswordForm() {
                             placeholder="New Password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="pl-10 pr-10 bg-gray text-white placeholder-gray-400"
+                            className="pl-10 pr-10 bg-input-background text-foreground placeholder:text-muted-foreground"
                             required
                             minLength={6}
                         />
-                        <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                         <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
                             {showNewPassword ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -219,15 +219,15 @@ export default function ResetPasswordForm() {
                             placeholder="Confirm New Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="pl-10 pr-10 bg-gray text-white placeholder-gray-400"
+                            className="pl-10 pr-10 bg-input-background text-foreground placeholder:text-muted-foreground"
                             required
                             minLength={6}
                         />
-                        <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                         >
                             {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                         </button>

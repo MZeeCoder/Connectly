@@ -12,9 +12,9 @@ export default function AlertMessage({ type, title, description }: AlertMessageP
 
     const styles = {
         container: isError
-            ? "border-red-500 text-red-500"
-            : "border-green-500 text-green-500",
-        icon: isError ? "text-red-500" : "text-green-500",
+            ? "border-destructive text-destructive"
+            : "border-primary text-primary",
+        icon: isError ? "text-destructive" : "text-primary",
     };
 
     const Icon = isError ? BsExclamationTriangle : HiOutlineCheckCircle;

@@ -102,21 +102,21 @@ export default function SinginForm() {
         }
     };
     return (
-        <div className="flex flex-col gap-3 -mt-10 items-center justify-center  bg-[#0C0C0C] px-4">
+        <div className="flex flex-col gap-3 -mt-10 items-center justify-center  bg-background px-4">
             {/* Connectly Logo */}
             <div className="flex items-center gap-2 mb-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">C</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                    <span className="text-primary-foreground font-bold text-xl">C</span>
                 </div>
-                <span className="text-white text-2xl font-bold">Connectly</span>
+                <span className="text-foreground text-2xl font-bold">Connectly</span>
             </div>
-            <div className="w-full max-w-sm bg-black rounded-2xl p-6 space-y-5 shadow-lg animate-[slideDown_0.5s_ease-out]">
+            <div className="w-full max-w-sm bg-card rounded-2xl p-6 space-y-5 shadow-lg border border-border animate-[slideDown_0.5s_ease-out]">
                 {/* Title */}
                 <div className="text-center space-y-1.5">
-                    <h1 className="text-2xl font-bold text-white">
+                    <h1 className="text-2xl font-bold text-foreground">
                         Sign in to your account
                     </h1>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-muted-foreground text-sm">
                         Welcome back! Please enter your details
                     </p>
                 </div>
@@ -133,7 +133,7 @@ export default function SinginForm() {
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1.5">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Email
                         </label>
                         <Input
@@ -142,13 +142,13 @@ export default function SinginForm() {
                             placeholder="your@email.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="bg-gray text-white placeholder-gray-500 border-0"
+                            className="bg-input-background text-foreground placeholder:text-muted-foreground border-0"
                             required
                         />
                     </div>
 
                     <div className="space-y-1.5">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Password
                         </label>
                         <div className="relative">
@@ -158,13 +158,13 @@ export default function SinginForm() {
                                 type={showPassword ? "text" : "password"}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="pr-10 bg-gray text-white placeholder-gray-500 border-0"
+                                className="pr-10 bg-input-background text-foreground placeholder:text-muted-foreground border-0"
                                 required
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 {showPassword ? <FiEyeOff /> : <FiEye />}
                             </button>
@@ -193,17 +193,17 @@ export default function SinginForm() {
                 {/* Divider */}
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-700"></div>
+                        <div className="w-full border-t border-border"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-black text-gray-400">Or continue with</span>
+                        <span className="px-2 bg-card text-muted-foreground">Or continue with</span>
                     </div>
                 </div>
 
                 {/* Magic Link Login Form */}
                 <form onSubmit={handleMagicLinkSubmit} className="space-y-3">
                     <div className="">
-                        <label className="text-white text-sm font-medium">
+                        <label className="text-foreground text-sm font-medium">
                             Email Magic Link
                         </label>
                         <Input
@@ -212,7 +212,7 @@ export default function SinginForm() {
                             type="email"
                             value={magicLinkEmail}
                             onChange={(e) => setMagicLinkEmail(e.target.value)}
-                            className="bg-gray mt-1 text-white placeholder-gray-500 border-0"
+                            className="bg-input-background mt-1 text-foreground placeholder:text-muted-foreground border-0"
                             required
                             disabled={isSendingMagicLink}
                         />
@@ -235,7 +235,7 @@ export default function SinginForm() {
                     </button>
                 </form>
                 {/* Create Account */}
-                <div className="text-center text-gray-500 text-sm">
+                <div className="text-center text-muted-foreground text-sm">
                     Not a member?{" "}
                     <Link href={APP_ROUTES.SIGN_UP} className="text-primary underline">
                         Sign up
