@@ -196,7 +196,7 @@ export function FeedClient({ initialPosts }: FeedClientProps) {
                                 strokeWidth="2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className="text-green-500"
+                                className="text-primary"
                             >
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                                 <circle cx="8.5" cy="8.5" r="1.5" />
@@ -219,7 +219,7 @@ export function FeedClient({ initialPosts }: FeedClientProps) {
                                 strokeWidth="2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className="text-blue-500"
+                                className="text-primary"
                             >
                                 <polygon points="23 7 16 12 23 17 23 7" />
                                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />

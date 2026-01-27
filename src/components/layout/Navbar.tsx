@@ -18,7 +18,7 @@ export function Navbar() {
                 {/* Logo */}
                 <Link href={APP_ROUTES.HOME} className="flex items-center gap-2">
                     <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                        <span className="text-lg font-bold text-white">C</span>
+                        <span className="text-lg font-bold text-primary-foreground">C</span>
                     </div>
                     <span className="text-xl font-bold text-foreground">{APP_NAME}</span>
                 </Link>

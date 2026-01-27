@@ -8,15 +8,15 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 primary:
-                    "bg-primary text-white hover:bg-primary/90 focus-visible:ring-primary",
+                    "bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-primary",
                 secondary:
-                    "bg-secondary text-white hover:bg-secondary/90 focus-visible:ring-secondary",
+                    "bg-secondary text-secondary-foreground hover:bg-secondary/90 focus-visible:ring-secondary",
                 accent:
-                    "bg-accent text-white hover:bg-accent/90 focus-visible:ring-accent",
+                    "bg-accent text-accent-foreground hover:bg-accent/90 focus-visible:ring-accent",
                 ghost:
                     "hover:bg-card hover:text-foreground focus-visible:ring-border",
                 danger:
-                    "bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600",
+                    "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive",
                 outline:
                     "border border-border bg-transparent hover:bg-card hover:text-foreground focus-visible:ring-border",
             },

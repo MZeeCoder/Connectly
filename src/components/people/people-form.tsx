@@ -85,7 +85,7 @@ export default function PeopleForm() {
     if (error) {
         return (
             <div className="p-6 max-w-5xl mx-auto">
-                <p className="text-red-500">Error: {error}</p>
+                <p className="text-destructive">Error: {error}</p>
             </div>
         );
     }
@@ -106,17 +106,17 @@ export default function PeopleForm() {
                         strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="text-gray-400 mb-4"
+                        className="text-muted-foreground mb-4"
                     >
                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                     </svg>
-                    <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                    <h2 className="text-xl font-semibold text-foreground mb-2">
                         No Users Found
                     </h2>
-                    <p className="text-gray-500 max-w-md">
+                    <p className="text-muted-foreground max-w-md">
                         There are currently no users in the community. Be the first to invite people and start building your network!
                     </p>
                 </div>
@@ -136,7 +136,7 @@ export default function PeopleForm() {
                     return (
                         <div
                             key={user.id}
-                            className="border rounded-xl p-4 flex items-center gap-4 justify-between"
+                            className="border border-border rounded-xl p-4 flex items-center gap-4 justify-between"
                         >
                             <div className="flex items-center gap-4 flex-1">
                                 {/* Avatar */}
@@ -148,10 +148,10 @@ export default function PeopleForm() {
 
                                 {/* Info */}
                                 <div className="flex-1">
-                                    <p className="font-semibold">{user?.full_name || user?.username}</p>
-                                    <p className="text-sm text-gray-500">@{user?.email}</p>
+                                    <p className="font-semibold text-foreground">{user?.full_name || user?.username}</p>
+                                    <p className="text-sm text-muted-foreground">@{user?.email}</p>
                                     {user.bio && (
-                                        <p className="text-xs text-gray-400 mt-1 line-clamp-2">
+                                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                                             {user.bio}
                                         </p>
                                     )}
@@ -165,8 +165,8 @@ export default function PeopleForm() {
                                 className={`
                                     px-6 py-2 rounded-lg font-medium transition-all duration-200
                                     ${isFollowing
-                                        ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                                        ? 'bg-muted text-foreground hover:bg-muted/80'
+                                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
                                     }
                                     disabled:opacity-50 disabled:cursor-not-allowed
                                     min-w-[110px] flex items-center justify-center

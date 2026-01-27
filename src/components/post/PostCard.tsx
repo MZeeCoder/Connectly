@@ -171,7 +171,7 @@ export function PostCard({
                                     <button
                                         onClick={handleDelete}
                                         disabled={isDeleting}
-                                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-muted disabled:opacity-50"
+                                        className="flex w-full items-center gap-2 px-4 py-2 text-sm text-destructive hover:bg-muted disabled:opacity-50"
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -216,7 +216,7 @@ export function PostCard({
                             {/* Navigation Arrows */}
                             <button
                                 onClick={handlePrevImage}
-                                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-foreground/50 p-2 text-background hover:bg-foreground/70"
                                 aria-label="Previous image"
                             >
                                 <svg
@@ -235,7 +235,7 @@ export function PostCard({
                             </button>
                             <button
                                 onClick={handleNextImage}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-foreground/50 p-2 text-background hover:bg-foreground/70"
                                 aria-label="Next image"
                             >
                                 <svg
@@ -262,8 +262,8 @@ export function PostCard({
                                         className={cn(
                                             "h-2 w-2 rounded-full transition-colors",
                                             index === currentImageIndex
-                                                ? "bg-white"
-                                                : "bg-white/50 hover:bg-white/75"
+                                                ? "bg-foreground"
+                                                : "bg-foreground/50 hover:bg-foreground/75"
                                         )}
                                         aria-label={`Go to image ${index + 1}`}
                                     />

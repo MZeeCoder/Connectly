@@ -116,7 +116,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
     return (
         <aside
             className={cn(
-                "fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] bg-[#1E1F20]  lg:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
+                "fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] bg-sidebar  lg:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
                 isHovered ? "w-48" : "w-14"
             )}
             onMouseEnter={() => setIsHovered(true)}
@@ -135,7 +135,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
                                 "flex items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",
                                 isActive
                                     ? "bg-primary/20 text-primary border border-primary/30"
-                                    : "text-gray-400 hover:bg-[#2A2B2C] hover:text-gray-200"
+                                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                             )}
                             title={!isHovered ? item.label : undefined}
                         >
@@ -156,7 +156,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
             </nav>
 
             {/* Profile Section at Bottom */}
-            <div className="relative border-t border-[#3A3B3C] p-2" ref={profileMenuRef}>
+            <div className="relative border-t border-border p-2" ref={profileMenuRef}>
                 <Link
                     href={APP_ROUTES.PROFILE}
                     onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -164,7 +164,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
                         "flex w-full items-center gap-2 rounded-lg px-2 py-2.5 text-xs font-medium transition-colors relative overflow-hidden",
                         activeSection === "profile"
                             ? "bg-primary/20 text-primary border border-primary/30"
-                            : "text-gray-400 hover:bg-[#2A2B2C] hover:text-gray-200"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                     title={!isHovered ? "Profile" : undefined}
                 >
@@ -175,7 +175,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
                             className="flex-shrink-0 h-7 w-7 rounded-full object-cover"
                         />
                     ) : (
-                        <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white font-semibold text-xs">
+                        <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold text-xs">
                             {profile?.full_name?.[0] || profile?.username?.[0] || "U"}
                         </div>
                     )}
@@ -186,10 +186,10 @@ export function Sidebar({ activeSection }: SidebarProps) {
                         )}
                     >
                         <div className="text-left">
-                            <div className="text-xs font-medium text-white">
+                            <div className="text-xs font-medium text-foreground">
                                 {profile?.full_name || profile?.username || "User"}
                             </div>
-                            <div className="text-[10px] text-gray-400">
+                            <div className="text-[10px] text-muted-foreground">
                                 @{profile?.username || "username"}
                             </div>
                         </div>

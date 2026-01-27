@@ -67,7 +67,7 @@ export default function SignupForm() {
 
                     {/* Back to Login */}
                     <Link href={APP_ROUTES.SIGN_IN}>
-                        <Button className="w-full bg-primary hover:bg-primary/80 text-black font-semibold">
+                        <Button className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-semibold">
                             {authMessages.labels.goToLogin}
                         </Button>
                     </Link>
@@ -171,7 +171,7 @@ export default function SignupForm() {
                         type="submit"
                         isLoading={isLoading || isRedirecting}
                         disabled={isLoading || isRedirecting}
-                        className="w-full bg-primary hover:bg-primary/80 text-black font-semibold"
+                        className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-semibold"
                     >
                         {isRedirecting ? authMessages.messages.signup.success.description : authMessages.labels.signUp}
                     </Button>

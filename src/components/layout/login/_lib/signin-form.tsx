@@ -185,7 +185,7 @@ export default function SinginForm() {
                         type="submit"
                         isLoading={isLoading || isRedirecting}
                         disabled={isLoading || isRedirecting}
-                        className="w-full bg-primary hover:bg-primary/80 text-black font-semibold"
+                        className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-semibold"
                     >
                         {isRedirecting ? authMessages.messages.signin.success.redirecting : authMessages.labels.signIn}
                     </Button>
@@ -229,7 +229,7 @@ export default function SinginForm() {
                     <button
                         type="submit"
                         disabled={isSendingMagicLink}
-                        className="w-full bg-primary hover:bg-primary/80 text-black font-semibold py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                        className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-semibold py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                     >
                         {isSendingMagicLink ? "Sending..." : "Send Magic Link"}
                     </button>

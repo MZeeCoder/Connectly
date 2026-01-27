@@ -273,7 +273,7 @@ export function CreatePostModal({
             isOpen={isOpen}
             onClose={handleClose}
             title={isEditing ? "Edit Post" : "Create Post"}
-            className="w-[95%] sm:w-[90%] md:w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-2 sm:mx-4 rounded-xl sm:rounded-2xl bg-[#632b98]"
+            className="w-[95%] sm:w-[90%] md:w-full md:max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-2 sm:mx-4 rounded-xl sm:rounded-2xl bg-card"
             showCloseButton={!isSubmitting}
         >
             <div className="flex flex-col space-y-3 sm:space-y-4 md:space-y-5">
@@ -299,13 +299,13 @@ export function CreatePostModal({
                         placeholder="What's on your mind? ✨"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] lg:min-h-[160px] resize-none border-none bg-transparent p-0 text-sm sm:text-base text-black placeholder:text-gray-600 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] lg:min-h-[160px] resize-none border-none bg-transparent p-0 text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
                         disabled={isSubmitting}
                     />
 
                     {/* Character Counter with progress bar */}
                     <div className="mt-2 sm:mt-3 space-y-1.5 sm:space-y-2">
-                        <div className="h-0.5 sm:h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                        <div className="h-0.5 sm:h-1 w-full bg-muted rounded-full overflow-hidden">
                             <div
                                 className={cn(
                                     "h-full transition-all duration-300 ease-out",
@@ -326,7 +326,7 @@ export function CreatePostModal({
                                         ? "text-red-600 font-semibold"
                                         : characterCount > POST_MAX_LENGTH * 0.9
                                             ? "text-yellow-600"
-                                            : "text-gray-500"
+                                            : "text-muted-foreground"
                                 )}
                             >
                                 {characterCount} / {POST_MAX_LENGTH}
@@ -403,74 +403,74 @@ export function CreatePostModal({
                         disabled={isSubmitting}
                         className="hidden"
                     />
-                <label
-                    htmlFor="media-upload"
-                    className={cn(
-                        "flex cursor-pointer items-center gap-2 sm:gap-3 rounded-md sm:rounded-lg bg-white border-2 border-purple-200 px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 text-xs sm:text-sm font-medium text-purple-700 transition-all duration-300 hover:bg-purple-50 hover:border-purple-300 hover:shadow-md hover:scale-105 active:scale-95",
-                        isSubmitting && "opacity-50 cursor-not-allowed hover:scale-100"
-                    )}
-                >
-                    <span className="whitespace-nowrap">Add Photos / Videos</span>
-                </label>
-
-                <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-600">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="whitespace-nowrap">Max {MAX_FILE_SIZE / 1024 / 1024}MB</span>
-                </div>
-            </div>
-
-            {/* Enhanced Footer */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t-2 border-purple-100">
-                {/* Upload Progress Indicator */}
-                {isUploading && (
-                    <div className="flex items-center gap-2 text-xs sm:text-sm text-purple-600 animate-pulse">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span className="font-medium">Uploading media...</span>
-                    </div>
-                )}
-
-                <div className={cn("flex gap-2 sm:gap-3 w-full sm:w-auto", isUploading ? "sm:ml-auto" : "sm:ml-auto")}>
-                    <Button
-                        variant="outline"
-                        onClick={handleClose}
-                        disabled={isSubmitting}
-                        className="flex-1 sm:flex-none px-4 sm:px-6 text-xs sm:text-sm transition-all duration-200 hover:scale-105 active:scale-95"
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        onClick={handleSubmit}
-                        isLoading={isSubmitting}
-                        disabled={
-                            isSubmitting ||
-                            isOverLimit ||
-                            (!content.trim() && media.length === 0)
-                        }
-                        className="flex-1 sm:flex-none px-6 sm:px-8 text-xs sm:text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
-                    >
-                        {isUploading ? (
-                            <span className="flex items-center gap-2">
-                                <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Uploading...
-                            </span>
-                        ) : isEditing ? (
-                            "Save Changes"
-                        ) : (
-                            "Post"
+                    <label
+                        htmlFor="media-upload"
+                        className={cn(
+                            "flex cursor-pointer items-center gap-2 sm:gap-3 rounded-md sm:rounded-lg bg-white border-2 border-purple-200 px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 text-xs sm:text-sm font-medium text-purple-700 transition-all duration-300 hover:bg-purple-50 hover:border-purple-300 hover:shadow-md hover:scale-105 active:scale-95",
+                            isSubmitting && "opacity-50 cursor-not-allowed hover:scale-100"
                         )}
-                    </Button>
+                    >
+                        <span className="whitespace-nowrap">Add Photos / Videos</span>
+                    </label>
+
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-muted-foreground">
+                        <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="whitespace-nowrap">Max {MAX_FILE_SIZE / 1024 / 1024}MB</span>
+                    </div>
+                </div>
+
+                {/* Enhanced Footer */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 pt-3 sm:pt-4 border-t-2 border-purple-100">
+                    {/* Upload Progress Indicator */}
+                    {isUploading && (
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-purple-600 animate-pulse">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span className="font-medium">Uploading media...</span>
+                        </div>
+                    )}
+
+                    <div className={cn("flex gap-2 sm:gap-3 w-full sm:w-auto", isUploading ? "sm:ml-auto" : "sm:ml-auto")}>
+                        <Button
+                            variant="outline"
+                            onClick={handleClose}
+                            disabled={isSubmitting}
+                            className="flex-1 sm:flex-none px-4 sm:px-6 text-xs sm:text-sm transition-all duration-200 hover:scale-105 active:scale-95"
+                        >
+                            Cancel
+                        </Button>
+
+                        <Button
+                            onClick={handleSubmit}
+                            isLoading={isSubmitting}
+                            disabled={
+                                isSubmitting ||
+                                isOverLimit ||
+                                (!content.trim() && media.length === 0)
+                            }
+                            className="flex-1 sm:flex-none px-6 sm:px-8 text-xs sm:text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                        >
+                            {isUploading ? (
+                                <span className="flex items-center gap-2">
+                                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Uploading...
+                                </span>
+                            ) : isEditing ? (
+                                "Save Changes"
+                            ) : (
+                                "Post"
+                            )}
+                        </Button>
+                    </div>
                 </div>
             </div>
-        </div>
         </Modal >
     );
 }

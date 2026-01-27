@@ -25,8 +25,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 <input
                     type={type}
                     className={cn(
-                        "flex h-10 w-full rounded-md border border-gray bg-black px-3 py-2 text-sm text-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:border-primary focus-visible:border-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                        error && "border-red-500 focus-visible:border-red-500",
+                        "flex h-10 w-full rounded-md border border-border bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-primary focus-visible:border-2 hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                        error && "border-destructive focus-visible:border-destructive",
                         className
                     )}
                     id={inputId}
@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     {...props}
                 />
                 {error && (
-                    <p className="mt-1 text-sm text-red-500">{error}</p>
+                    <p className="mt-1 text-sm text-destructive">{error}</p>
                 )}
                 {helperText && !error && (
                     <p className="mt-1 text-sm text-muted-foreground">{helperText}</p>
