@@ -9,7 +9,7 @@ import { ProfileService } from "@/server/services/profile.service";
 import type { ProfileUser } from "@/app/api/profile/route";
 
 interface SidebarProps {
-    activeSection: "feed" | "messages" | "profile" | "explore" | "notifications" | "settings" | null;
+    activeSection: "feed" | "messages" | "profile" | "explore" | "notifications" | "settings" | "peoples" | null;
 }
 
 const sidebarItems = [
@@ -156,7 +156,7 @@ export function Sidebar({ activeSection }: SidebarProps) {
     return (
         <aside
             className={cn(
-                "fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] bg-sidebar  lg:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
+                "fixed left-0 top-14 hidden h-[calc(100vh-3.5rem)] bg-sidebar md:flex flex-col transition-[width] duration-150 ease-out z-50 overflow-hidden",
                 isHovered ? "w-48" : "w-14"
             )}
             onMouseEnter={() => setIsHovered(true)}

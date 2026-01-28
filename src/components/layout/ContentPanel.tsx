@@ -17,7 +17,7 @@ export function ContentPanel({ section }: ContentPanelProps) {
     return (
         <aside
             className={cn(
-                "fixed left-14 top-14 h-[calc(100vh-3.5rem)] w-72 bg-card rounded-tl-xl border-r border-border hidden lg:block overflow-y-auto"
+                "fixed left-14 top-14 h-[calc(100vh-3.5rem)] w-72 md:w-64 lg:w-72 bg-card rounded-tl-xl border-r border-border hidden md:block overflow-y-auto"
             )}
         >
             {section === "feed" && <FeedPanel />}

@@ -92,12 +92,12 @@ export function PostCard({
     return (
         <article
             className={cn(
-                "bg-white border border-slate-100 rounded-4xl shadow-sm p-8 transition-shadow hover:shadow-md",
+                "bg-white border border-slate-100 rounded-2xl sm:rounded-3xl lg:rounded-4xl shadow-sm p-4 sm:p-6 lg:p-8 transition-shadow hover:shadow-md",
                 className
             )}
         >
             {/* Header - User Info & Menu */}
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-4 sm:mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Avatar
                         src={post.user?.avatar_url}

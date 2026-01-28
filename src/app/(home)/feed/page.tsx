@@ -13,7 +13,7 @@ async function FeedContent() {
 
 export default function FeedPage() {
     return (
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-2xl lg:max-w-3xl xl:max-w-4xl">
             <Suspense fallback={<FeedSkeleton />}>
                 <FeedContent />
             </Suspense>

@@ -21,25 +21,25 @@ export function ExploreContent() {
     const [activeCategory, setActiveCategory] = useState("For You");
 
     return (
-        <div className="flex flex-col gap-6 p-6 max-w-4xl mx-auto">
+        <div className="flex flex-col gap-4 sm:gap-6 p-2 sm:p-6 max-w-4xl mx-auto">
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto w-full">
                 <input
                     type="text"
                     placeholder="Search for people, tags, and inspiration..."
-                    className="w-full bg-card border border-border rounded-full px-12 py-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                    className="w-full bg-card border border-border rounded-full px-10 sm:px-12 py-3 sm:py-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                 />
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="absolute left-5 top-4 text-muted-foreground"
+                    className="absolute left-3 sm:left-5 top-3 sm:top-4 text-muted-foreground"
                 >
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
@@ -48,7 +48,7 @@ export function ExploreContent() {
 
             {/* Category Tabs */}
             <div className="relative flex items-center group">
-                <button className="absolute left-0 z-10 p-1.5 bg-background/80 backdrop-blur-sm border border-border rounded-full shadow-md text-muted-foreground hover:text-foreground transition-colors -ml-3">
+                <button className="absolute left-0 z-10 p-1.5 bg-background/80 backdrop-blur-sm border border-border rounded-full shadow-md text-muted-foreground hover:text-foreground transition-colors -ml-3 hidden sm:block">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -64,13 +64,13 @@ export function ExploreContent() {
                     </svg>
                 </button>
 
-                <div className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth px-2 py-1 flex-1">
+                <div className="flex gap-2 sm:gap-3 overflow-x-auto no-scrollbar scroll-smooth px-1 sm:px-2 py-1 flex-1">
                     {CATEGORIES.map((category) => (
                         <button
                             key={category}
                             onClick={() => setActiveCategory(category)}
                             className={cn(
-                                "whitespace-nowrap px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 border",
+                                "whitespace-nowrap px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 border",
                                 activeCategory === category
                                     ? "bg-primary text-primary-foreground border-primary shadow-sm"
                                     : "bg-card text-muted-foreground border-border hover:bg-accent hover:text-foreground"
@@ -81,7 +81,7 @@ export function ExploreContent() {
                     ))}
                 </div>
 
-                <button className="absolute right-0 z-10 p-1.5 bg-background/80 backdrop-blur-sm border border-border rounded-full shadow-md text-muted-foreground hover:text-foreground transition-colors -mr-3">
+                <button className="absolute right-0 z-10 p-1.5 bg-background/80 backdrop-blur-sm border border-border rounded-full shadow-md text-muted-foreground hover:text-foreground transition-colors -mr-3 hidden sm:block">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"

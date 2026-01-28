@@ -197,7 +197,7 @@ export default function PeopleForm() {
     };
 
     return (
-        <aside className="w-80 hidden lg:flex flex-col gap-6 p-4 bg-sidebar border-l border-border h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto">
+        <aside className="w-80 xl:w-96 hidden lg:flex flex-col gap-6 p-4 bg-sidebar border-l border-border h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto">
             {/* Search Bar */}
             <div className="sticky top-0 bg-sidebar z-20 pb-4 -mx-4 px-4 pt-2">
                 <div className="relative">
