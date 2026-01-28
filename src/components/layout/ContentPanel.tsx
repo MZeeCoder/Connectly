@@ -31,7 +31,6 @@ function FeedPanel() {
     return (
         <div className="p-4 rounded-tl-xl ">
             <div className="mb-4">
-                <h2 className="text-lg font-semibold text-foreground mb-2">Feed</h2>
                 <div className="relative">
                     <input
                         type="text"
