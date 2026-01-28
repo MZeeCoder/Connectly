@@ -11,7 +11,11 @@ interface Message {
     isMe: boolean;
 }
 
-export function MessageContent() {
+interface MessageContentProps {
+    selectedUserId: string | null;
+}
+
+export function MessageContent({ selectedUserId }: MessageContentProps) {
     const [messages] = useState<Message[]>([
         { id: "1", text: "Hi there! How are you doing?", time: "10:00 AM", isMe: false },
         { id: "2", text: "I'm good, thanks! Just working on the new project.", time: "10:02 AM", isMe: true },
