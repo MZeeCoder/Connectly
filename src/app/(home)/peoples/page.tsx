@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { PeopleService } from "@/server/services/people.service";
+import { ProfileService } from "@/server/services/profile.service";
 import type { PeopleUser } from "@/app/api/peoples/route";
 import type { FollowStatusMap } from "@/types";
 import { PeopleSkeleton } from "@/components/people/PeopleSkeleton";
@@ -11,24 +12,50 @@ export default function PeoplePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [followStatus, setFollowStatus] = useState<FollowStatusMap>({});
+    const [followerStatus, setFollowerStatus] = useState<FollowStatusMap>({});
     const [followLoading, setFollowLoading] = useState<{ [key: string]: boolean }>({});
     const [searchQuery, setSearchQuery] = useState("");
+    const [filter, setFilter] = useState<'following' | 'followers' | 'all'>('following');
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchPeoples() {
             try {
                 setLoading(true);
+
+                // Get current user profile first
+                const profileResult = await ProfileService.getCurrentUserProfile();
+                let myId = "";
+                if (profileResult.success && profileResult.data) {
+                    myId = profileResult.data.id;
+                    setCurrentUserId(myId);
+                }
+
                 const result = await PeopleService.getAllPeoples();
 
                 if (result.success && result.data) {
                     setUsers(result.data);
 
-                    // Fetch follow status for all users
+                    // Fetch follow status (people I am following)
                     const userIds = result.data.map(user => user.id);
                     if (userIds.length > 0) {
                         const statusResult = await PeopleService.getFollowStatusMap(userIds);
                         if (statusResult.success && statusResult.data) {
                             setFollowStatus(statusResult.data);
+                        }
+                    }
+
+                    // Fetch followers (people following me)
+                    if (myId) {
+                        const followersResult = await PeopleService.getFollowers(myId);
+                        if (followersResult.success && followersResult.data) {
+                            const fStatus: FollowStatusMap = {};
+                            followersResult.data.forEach((item: any) => {
+                                if (item.follower && item.follower.id) {
+                                    fStatus[item.follower.id] = true;
+                                }
+                            });
+                            setFollowerStatus(fStatus);
                         }
                     }
                 } else {
@@ -75,14 +102,46 @@ export default function PeoplePage() {
         }
     };
 
+    const highlightText = (text: string, highlight: string) => {
+        if (!highlight.trim()) {
+            return <span>{text}</span>;
+        }
+        const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedHighlight})`, "gi");
+        const parts = text.split(regex);
+        return (
+            <span>
+                {parts.map((part, i) =>
+                    regex.test(part) ? (
+                        <span key={i} style={{ color: "#FF9632" }}>{part}</span>
+                    ) : (
+                        <span key={i}>{part}</span>
+                    )
+                )}
+            </span>
+        );
+    };
+
     const filteredUsers = users.filter(user => {
         const searchLower = searchQuery.toLowerCase();
-        return (
+        const matchesSearch = (
             user.full_name?.toLowerCase().includes(searchLower) ||
             user.username?.toLowerCase().includes(searchLower) ||
             user.email?.toLowerCase().includes(searchLower)
         );
+
+        const isFollowing = followStatus[user.id] || false;
+        const isFollower = followerStatus[user.id] || false;
+
+        let matchesFilter = true;
+        if (filter === 'following') matchesFilter = isFollowing;
+        else if (filter === 'followers') matchesFilter = isFollower;
+
+        return matchesSearch && matchesFilter;
     });
+
+    const followingCount = Object.values(followStatus).filter(Boolean).length;
+    const followersCount = Object.values(followerStatus).filter(Boolean).length;
 
     return (
         <div className="max-w-4xl mx-auto">
@@ -112,8 +171,38 @@ export default function PeoplePage() {
                         className="absolute left-4 top-3.5 text-muted-foreground"
                     >
                         <circle cx="11" cy="11" r="8" />
-                        <path d="m21 21-4.35-4.35" />
                     </svg>
+                </div>
+
+                {/* Filter Tabs */}
+                <div className="flex items-center gap-3 mt-6 overflow-x-auto pb-2 scrollbar-hide">
+                    <button
+                        onClick={() => setFilter('followers')}
+                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${filter === 'followers'
+                            ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                            : 'bg-white text-primary border-2 border-primary/20 hover:border-primary/50 hover:bg-primary/5'
+                            }`}
+                    >
+                        Followers ({followersCount})
+                    </button>
+                    <button
+                        onClick={() => setFilter('following')}
+                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${filter === 'following'
+                            ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                            : 'bg-white text-primary border-2 border-primary/20 hover:border-primary/50 hover:bg-primary/5'
+                            }`}
+                    >
+                        Following ({followingCount})
+                    </button>
+                    <button
+                        onClick={() => setFilter('all')}
+                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 whitespace-nowrap ${filter === 'all'
+                            ? 'bg-primary text-primary-foreground shadow-md scale-105'
+                            : 'bg-white text-primary border-2 border-primary/20 hover:border-primary/50 hover:bg-primary/5'
+                            }`}
+                    >
+                        See All (999+)
+                    </button>
                 </div>
             </div>
 
@@ -128,33 +217,28 @@ export default function PeoplePage() {
             {loading ? (
                 <PeopleSkeleton />
             ) : filteredUsers.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center px-4">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="64"
-                        height="64"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-muted-foreground mb-4 opacity-50"
-                    >
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
-                        {searchQuery ? "No Results Found" : "No Users Yet"}
+                <div className="flex flex-col items-center justify-center py-24 text-center px-4 bg-accent/10 rounded-3xl border-2 border-dashed border-border/50 animate-in fade-in zoom-in duration-500">
+                    <div className="w-24 h-24 bg-white rounded-full shadow-xl flex items-center justify-center mb-6 text-primary border border-border/50">
+                        {filter === 'following' ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M19 8v6" /><path d="M22 11h-6" /></svg>
+                        ) : filter === 'followers' ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M17 11l2 2 4-4" /></svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                        )}
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground mb-3">
+                        {filter === 'following' ? "You aren't following anyone yet" : filter === 'followers' ? "No followers yet" : "No users found"}
                     </h3>
-                    <p className="text-sm text-muted-foreground max-w-md">
-                        {searchQuery
-                            ? "Try adjusting your search terms or filters."
-                            : "Be the first to connect! Invite people to join Connectly."
-                        }
+                    <p className="text-muted-foreground max-w-sm mb-8 leading-relaxed">
+                        {filter === 'following' ? "Connections make your experience better! Follow people to see their latest posts and activities here." : filter === 'followers' ? "Don't worry, keep posting great content and people will start following you soon!" : "We couldn't find anyone matching your current search or filter. Try something else!"}
                     </p>
+                    <button
+                        onClick={() => { setFilter('all'); setSearchQuery(''); }}
+                        className="bg-primary text-primary-foreground px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-primary/30 hover:-translate-y-1 transition-all"
+                    >
+                        Explore Discoveries
+                    </button>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -180,18 +264,11 @@ export default function PeoplePage() {
 
                                     {/* User Info */}
                                     <h3 className="font-bold text-base text-foreground mb-1 truncate w-full">
-                                        {user?.full_name || user?.username}
+                                        {highlightText(user?.full_name || user?.username || "", searchQuery)}
                                     </h3>
                                     <p className="text-sm text-muted-foreground mb-3 truncate w-full">
-                                        @{user?.username || user?.email?.split('@')[0]}
+                                        @{highlightText(user?.username || user?.email?.split('@')[0] || "", searchQuery)}
                                     </p>
-
-                                    {/* Bio */}
-                                    {user.bio && (
-                                        <p className="text-xs text-muted-foreground mb-4 line-clamp-2 w-full">
-                                            {user.bio}
-                                        </p>
-                                    )}
 
                                     {/* Follow Button */}
                                     <button

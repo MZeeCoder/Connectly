@@ -59,7 +59,7 @@ function FeedPanel() {
                 <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
                     Categories
                 </div>
-                {["All Posts", "Trending", "Following", "Saved"].map((item) => (
+                {["All Posts", "Trending", "Following", "Followers"].map((item) => (
                     <button
                         key={item}
                         className="w-full flex items-center gap-3 px-3 py-2 text-sm text-muted-foreground hover:bg-accent rounded-lg transition-colors"
