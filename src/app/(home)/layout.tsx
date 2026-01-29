@@ -28,7 +28,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
     const showContentPanel = activeSection === "feed" || activeSection === "messages" || activeSection === "profile";
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex h-screen flex-col overflow-hidden">
             {/* Top Header with Connectly Branding */}
             <header className="fixed top-0 left-0 right-0 h-12 bg-sidebar border-b border-border z-50 flex items-center justify-between px-4">
                 {/* Left: Logo (always visible) */}
@@ -82,7 +82,7 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                     className={`
                         flex-1 transition-all duration-300 
                         mt-12 mb-16 md:mb-0 md:mt-14
-                        bg-card 
+                        bg-card flex flex-col overflow-hidden
                         ${showContentPanel
                             ? "md:ml-[306px] lg:ml-[344px] md:border-l"
                             : "md:ml-14 lg:ml-14 md:rounded-tl-xl md:border-l"
@@ -90,7 +90,9 @@ export default function HomeLayout({ children }: { children: ReactNode }) {
                         border-border
                     `}
                 >
-                    <div className="mx-auto px-2 sm:px-4 py-4 sm:py-6">{children}</div>
+                    <div className="flex-1 overflow-y-auto custom-scrollbar">
+                        <div className="mx-auto px-2 sm:px-4 py-4 sm:py-6">{children}</div>
+                    </div>
                 </main>
 
                 {/* People Sidebar - Desktop Only */}
